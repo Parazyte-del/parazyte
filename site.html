@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARAZYTE — Monteur FiveM</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #060608;
+    --dark: #0d0d10;
+    --mid: #141418;
+    --panel: #1a1a20;
+    --chrome-1: #e8e8e8;
+    --gold: #c8a96e;
+    --gold-dim: #7a6440;
+    --white: #f5f5f0;
+    --muted: #6b6b72;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--noir); color: var(--white); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 28px; height: 28px; border: 1px solid rgba(200,169,110,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.1s ease; }
+
+  .grain { position: fixed; inset: 0; z-index: 200; pointer-events: none; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 180px; animation: grainAnim 0.5s steps(1) infinite; }
+  @keyframes grainAnim { 0%,100%{transform:translate(0,0)} 10%{transform:translate(-2%,-3%)} 20%{transform:translate(3%,1%)} 30%{transform:translate(-1%,3%)} 40%{transform:translate(2%,-1%)} 50%{transform:translate(-3%,2%)} 60%{transform:translate(1%,-2%)} 70%{transform:translate(-2%,3%)} 80%{transform:translate(3%,-3%)} 90%{transform:translate(-1%,1%)} }
+  .vignette { position: fixed; inset: 0; z-index: 190; pointer-events: none; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.7) 100%); }
+
+  .chrome { background: linear-gradient(180deg, #ffffff 0%, #d0d0d0 20%, #f0f0f0 35%, #888 50%, #e0e0e0 65%, #a0a0a0 80%, #606060 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8)); }
+  .gold-text { background: linear-gradient(180deg, #f0d080 0%, #c8a96e 40%, #8a6a30 70%, #c8a96e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  nav { position: fixed; top: 0; left: 0; width: 100%; padding: 1.8rem 5rem; display: flex; align-items: center; justify-content: space-between; z-index: 100; background: linear-gradient(to bottom, rgba(6,6,8,0.98), transparent); border-bottom: 1px solid rgba(200,169,110,0.08); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.25em; text-decoration: none; }
+  .nav-links { display: flex; gap: 3rem; list-style: none; }
+  .nav-links a { font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; font-weight: 500; }
+  .nav-links a:hover { color: var(--gold); }
+
+  #hero { min-height: 100vh; display: flex; align-items: center; justify-content: flex-start; padding: 0 5rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(139,26,26,0.06) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 10% 90%, rgba(200,169,110,0.04) 0%, transparent 50%), linear-gradient(160deg, #060608 0%, #0d0a0a 50%, #060608 100%); }
+  .hero-lines { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(0deg, transparent, transparent 120px, rgba(200,169,110,0.03) 120px, rgba(200,169,110,0.03) 121px); }
+  .hero-vert-line { position: absolute; right: 5rem; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, rgba(200,169,110,0.15) 30%, rgba(200,169,110,0.15) 70%, transparent); }
+
+  .hero-content { position: relative; max-width: 780px; }
+  .hero-eyebrow { font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; opacity: 0; animation: fadeUp 1s 0.2s ease forwards; }
+  .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--gold-dim); }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(6rem, 16vw, 14rem); line-height: 0.88; letter-spacing: 0.04em; opacity: 0; animation: fadeUp 1s 0.35s ease forwards; }
+  .hero-title-sub { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 300; font-style: italic; color: rgba(245,245,240,0.35); letter-spacing: 0.2em; margin-top: 0.5rem; opacity: 0; animation: fadeUp 1s 0.5s ease forwards; }
+  .hero-title-sub span { color: var(--gold); font-style: normal; }
+  .hero-desc { font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 300; line-height: 1.9; color: var(--muted); max-width: 420px; margin-top: 2.5rem; letter-spacing: 0.06em; opacity: 0; animation: fadeUp 1s 0.65s ease forwards; }
+  .hero-cta { display: flex; gap: 1.2rem; margin-top: 3rem; opacity: 0; animation: fadeUp 1s 0.8s ease forwards; }
+
+  .btn { font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none; padding: 1rem 2.5rem; font-weight: 700; transition: all 0.3s; cursor: none; display: inline-block; }
+  .btn-gold { background: transparent; border: 1px solid var(--gold-dim); color: var(--gold); position: relative; overflow: hidden; }
+  .btn-gold::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200,169,110,0.1), transparent); transform: translateX(-100%); transition: transform 0.4s ease; }
+  .btn-gold:hover::before { transform: translateX(0); }
+  .btn-gold:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .btn-outline { background: transparent; border: 1px solid rgba(245,245,240,0.12); color: var(--muted); }
+  .btn-outline:hover { border-color: rgba(245,245,240,0.3); color: var(--white); }
+
+  .hero-scroll { position: absolute; bottom: 3rem; left: 5rem; display: flex; align-items: center; gap: 1rem; font-family: 'Rajdhani', sans-serif; font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); opacity: 0; animation: fadeUp 1s 1.1s ease forwards; }
+  .scroll-track { width: 60px; height: 1px; background: rgba(200,169,110,0.15); position: relative; overflow: hidden; }
+  .scroll-fill { position: absolute; top: 0; left: -100%; height: 100%; width: 100%; background: var(--gold-dim); animation: scrollSlide 2s ease infinite; }
+  @keyframes scrollSlide { 0%{left:-100%} 100%{left:100%} }
+  .frame-counter { position: absolute; bottom: 3rem; right: 5rem; font-family: 'Rajdhani', sans-serif; font-size: 0.62rem; letter-spacing: 0.3em; color: rgba(200,169,110,0.2); opacity: 0; animation: fadeUp 1s 1.2s ease forwards; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(25px)} to{opacity:1;transform:translateY(0)} }
+
+  .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(200,169,110,0.15), transparent); }
+  section { padding: 7rem 5rem; }
+  .section-tag { font-family: 'Rajdhani', sans-serif; font-size: 0.65rem; letter-spacing: 0.45em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold-dim); }
+  h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 5.5rem); letter-spacing: 0.06em; line-height: 1; margin-bottom: 0.5rem; }
+
+  #about { display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; background: var(--dark); }
+  .about-text p { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 300; line-height: 1.9; color: var(--muted); margin-bottom: 1rem; letter-spacing: 0.04em; }
+  .about-text strong { color: rgba(245,245,240,0.7); font-weight: 500; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(200,169,110,0.08); }
+  .stat-cell { background: var(--mid); padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: background 0.3s; }
+  .stat-cell:hover { background: var(--panel); }
+  .stat-cell::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); transform: scaleX(0); transition: transform 0.4s; }
+  .stat-cell:hover::after { transform: scaleX(1); }
+  .stat-n { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1; margin-bottom: 0.3rem; }
+  .stat-l { font-family: 'Rajdhani', sans-serif; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+
+  #services { background: var(--noir); }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(200,169,110,0.06); margin-top: 4rem; }
+  .service-card { background: var(--dark); padding: 3rem 2.5rem; position: relative; overflow: hidden; transition: background 0.3s; }
+  .service-card:hover { background: var(--mid); }
+  .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease; }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: rgba(200,169,110,0.06); line-height: 1; margin-bottom: 1.5rem; }
+  .service-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+  .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+  .service-desc { font-family: 'Rajdhani', sans-serif; font-size: 0.88rem; font-weight: 300; line-height: 1.7; color: var(--muted); letter-spacing: 0.03em; }
+
+  /* ── TARIFS ── */
+  #tarifs { background: var(--dark); }
+  .tarifs-header { margin-bottom: 4rem; }
+
+  /* Row 1 : 3 packs côte à côte */
+  .tarifs-row { display: grid; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .tarifs-row-3 { grid-template-columns: repeat(3, 1fr); }
+  /* Row 2 : 2 packs centrés */
+  .tarifs-row-2 { grid-template-columns: repeat(2, 1fr); max-width: 66.66%; margin-left: auto; margin-right: auto; }
+
+  .pack { border: 1px solid rgba(200,169,110,0.1); padding: 3rem 2.5rem; position: relative; background: var(--noir); transition: border-color 0.3s, transform 0.3s; }
+  .pack:hover { border-color: rgba(200,169,110,0.3); transform: translateY(-4px); }
+  .pack.featured { border-color: rgba(200,169,110,0.35); background: linear-gradient(160deg, rgba(200,169,110,0.04), var(--noir)); }
+  .pack-top-line { position: absolute; top: -1px; left: 10%; right: 10%; height: 2px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); opacity: 0; transition: opacity 0.3s; }
+  .pack:hover .pack-top-line, .pack.featured .pack-top-line { opacity: 1; }
+  .pack-label { font-family: 'Rajdhani', sans-serif; font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+  .pack-label.hot { color: var(--gold); }
+  .pack-label::before { content: '◆'; font-size: 0.5rem; }
+  .pack-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+  .pack-sub { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.5; }
+  .pack-price { display: flex; align-items: baseline; gap: 0.2rem; margin-bottom: 0.4rem; }
+  .pack-price-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 1; }
+  .pack-price-sym { font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; font-weight: 300; color: var(--gold-dim); align-self: flex-start; margin-top: 0.5rem; }
+  .pack-price-note { font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 2rem; font-style: italic; }
+  .pack-list { list-style: none; margin-bottom: 2.5rem; display: flex; flex-direction: column; gap: 0.7rem; }
+  .pack-list li { font-family: 'Rajdhani', sans-serif; font-size: 0.88rem; font-weight: 300; color: var(--muted); display: flex; gap: 0.75rem; align-items: flex-start; line-height: 1.4; letter-spacing: 0.03em; }
+  .pack-list li.yes { color: rgba(245,245,240,0.65); }
+  .pack-list li::before { content: '—'; color: rgba(200,169,110,0.3); flex-shrink: 0; font-family: monospace; }
+  .pack-list li.yes::before { content: '✓'; color: var(--gold-dim); }
+  .pack-btn { display: block; text-align: center; font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 700; text-decoration: none; padding: 0.9rem; border: 1px solid rgba(200,169,110,0.2); color: var(--muted); transition: all 0.3s; }
+  .pack-btn:hover, .pack.featured .pack-btn { background: rgba(200,169,110,0.08); border-color: var(--gold-dim); color: var(--gold); }
+
+  #process { background: var(--noir); }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(200,169,110,0.06); margin-top: 4rem; }
+  .step { background: var(--dark); padding: 2.5rem 2rem; position: relative; }
+  .step-n { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: rgba(200,169,110,0.05); line-height: 1; margin-bottom: 1rem; }
+  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+  .step-desc { font-family: 'Rajdhani', sans-serif; font-size: 0.84rem; font-weight: 300; line-height: 1.7; color: var(--muted); letter-spacing: 0.03em; }
+  .step::after { content: '→'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: var(--gold-dim); font-size: 1rem; z-index: 1; }
+  .step:last-child::after { display: none; }
+
+  #contact { background: var(--dark); text-align: center; }
+  #contact h2 { font-size: clamp(4rem, 10vw, 8rem); margin-bottom: 1rem; }
+  #contact p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.1rem; color: var(--muted); max-width: 480px; margin: 0 auto 3rem; line-height: 1.7; }
+  .contact-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .contact-info-list { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(200,169,110,0.08); }
+  .contact-item { display: flex; align-items: center; gap: 1rem; font-family: 'Rajdhani', sans-serif; font-size: 0.88rem; letter-spacing: 0.08em; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+  .contact-item:hover { color: var(--gold); }
+  .contact-item-icon { width: 36px; height: 36px; border: 1px solid rgba(200,169,110,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+
+  footer { padding: 2rem 5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(200,169,110,0.08); }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.25em; }
+  footer span { font-family: 'Rajdhani', sans-serif; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; } .nav-links { display: none; } section { padding: 5rem 2rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; } .services-grid, .process-steps { grid-template-columns: 1fr; }
+    .tarifs-row-3, .tarifs-row-2 { grid-template-columns: 1fr; max-width: 100%; }
+    footer { padding: 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    .hero-vert-line { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<nav>
+  <a href="#" class="nav-logo"><span class="gold-text">PARAZYTE</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-vert-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Monteur &amp; Clipeur FiveM RP</div>
+    <h1 class="hero-title"><span class="chrome">PARAZYTE</span></h1>
+    <p class="hero-title-sub">Vidéaste <span>·</span> Monteur <span>·</span> Clipeur</p>
+    <p class="hero-desc">Je capture tes meilleures scènes FiveM et les transforme en vidéos cinématiques qui marquent les esprits.</p>
+    <div class="hero-cta">
+      <a href="#tarifs" class="btn btn-gold">Voir les tarifs</a>
+      <a href="#contact" class="btn btn-outline">Me contacter</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-track"><div class="scroll-fill"></div></div>Défiler</div>
+  <div class="frame-counter">FRAME 001 — 24FPS</div>
+</section>
+
+<div class="divider"></div>
+
+<section id="about">
+  <div class="about-text reveal">
+    <div class="section-tag">Qui suis-je</div>
+    <h2><span class="chrome">JE SUIS<br>PARAZYTE</span></h2><br>
+    <p>Passionné par l'univers <strong>FiveM RP</strong>, je combine expertise technique et sens artistique pour créer des vidéos qui sortent du lot.</p>
+    <p>De la prise de clip sur le terrain jusqu'au rendu final, je gère chaque étape avec précision pour un résultat <strong>cinématique et percutant</strong>.</p><br>
+    <a href="#contact" class="btn btn-gold">Travailler ensemble</a>
+  </div>
+  <div class="stats-grid reveal">
+    <div class="stat-cell"><div class="stat-n"><span class="gold-text">50+</span></div><div class="stat-l">Projets réalisés</div></div>
+    <div class="stat-cell"><div class="stat-n"><span class="gold-text">48H</span></div><div class="stat-l">Délai moyen</div></div>
+    <div class="stat-cell"><div class="stat-n"><span class="gold-text">100%</span></div><div class="stat-l">Clients satisfaits</div></div>
+    <div class="stat-cell"><div class="stat-n"><span class="gold-text">∞</span></div><div class="stat-l">Créativité</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="services">
+  <div class="reveal"><div class="section-tag">Ce que je fais</div><h2><span class="chrome">MES SERVICES</span></h2></div>
+  <div class="services-grid reveal">
+    <div class="service-card"><div class="service-num">01</div><div class="service-icon">🎬</div><div class="service-name"><span class="chrome">Prise de Clip</span></div><p class="service-desc">Je capture tes scènes FiveM directement en jeu. Cadrage cinématique, angles dynamiques, moments clés sauvegardés.</p></div>
+    <div class="service-card"><div class="service-num">02</div><div class="service-icon">🎞️</div><div class="service-name"><span class="chrome">Montage Vidéo</span></div><p class="service-desc">Tu fournis tes rushs, je crée la magie. Transitions, effets, color grading cinématique, musique et sound design.</p></div>
+    <div class="service-card"><div class="service-num">03</div><div class="service-icon">⚡</div><div class="service-name"><span class="chrome">Vidéo de A à Z</span></div><p class="service-desc">Service complet — je gère la prise de clip ET le montage. Résultat professionnel livré clé en main, prêt à publier.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="tarifs">
+  <div class="tarifs-header reveal">
+    <div class="section-tag">Investissement</div>
+    <h2><span class="chrome">TARIFS</span></h2>
+  </div>
+
+  <!-- Ligne 1 : Clip · TikTok · YouTube -->
+  <div class="tarifs-row tarifs-row-3 reveal">
+
+    <!-- Pack Clip -->
+    <div class="pack">
+      <div class="pack-top-line"></div>
+      <div class="pack-label">Pack Essentiel</div>
+      <div class="pack-name"><span class="chrome">Prise de Clip</span></div>
+      <p class="pack-sub">Tu joues, je capture.<br>Les rushs bruts livrés direct.</p>
+      <div class="pack-price"><span class="pack-price-sym">€</span><span class="pack-price-num"><span class="gold-text">6</span></span></div>
+      <div class="pack-price-note">par session</div>
+      <ul class="pack-list">
+        <li class="yes">Prise de vue en jeu</li>
+        <li class="yes">Cadrage &amp; angles pro</li>
+        <li class="yes">Clips bruts livrés</li>
+        <li>Montage non inclus</li>
+      </ul>
+      <a href="#contact" class="pack-btn">Choisir ce pack</a>
+    </div>
+
+    <!-- Montage TikTok -->
+    <div class="pack featured">
+      <div class="pack-top-line"></div>
+      <div class="pack-label hot">📱 TikTok / Shorts</div>
+      <div class="pack-name"><span class="chrome">Montage TikTok</span></div>
+      <p class="pack-sub">Format vertical optimisé,<br>rythme punchy, prêt à poster.</p>
+      <div class="pack-price"><span class="pack-price-sym">€</span><span class="pack-price-num"><span class="gold-text">10</span></span></div>
+      <div class="pack-price-note">par vidéo</div>
+      <ul class="pack-list">
+        <li class="yes">Montage format 9:16</li>
+        <li class="yes">Transitions &amp; effets</li>
+        <li class="yes">Musique &amp; sound design</li>
+        <li class="yes">Sous-titres animés</li>
+        <li>Prise de vue non incluse</li>
+      </ul>
+      <a href="#contact" class="pack-btn">Choisir ce pack</a>
+    </div>
+
+    <!-- Montage YouTube -->
+    <div class="pack">
+      <div class="pack-top-line"></div>
+      <div class="pack-label">▶ YouTube</div>
+      <div class="pack-name"><span class="chrome">Montage YouTube</span></div>
+      <p class="pack-sub">Format long, rendu cinématique<br>optimisé pour YouTube.</p>
+      <div class="pack-price"><span class="pack-price-sym">€</span><span class="pack-price-num"><span class="gold-text">30</span></span></div>
+      <div class="pack-price-note">par vidéo</div>
+      <ul class="pack-list">
+        <li class="yes">Montage format 16:9</li>
+        <li class="yes">Color grading cinématique</li>
+        <li class="yes">Transitions &amp; effets pro</li>
+        <li class="yes">Musique &amp; sound design</li>
+        <li class="yes">Sous-titres animés</li>
+        <li class="yes">Intro / outro optionnels</li>
+      </ul>
+      <a href="#contact" class="pack-btn">Choisir ce pack</a>
+    </div>
+
+  </div>
+
+  <!-- Ligne 2 : Vidéo A→Z + Trailer -->
+  <div class="tarifs-row tarifs-row-2 reveal">
+
+    <!-- Vidéo de A à Z -->
+    <div class="pack">
+      <div class="pack-top-line"></div>
+      <div class="pack-label">Pack Complet</div>
+      <div class="pack-name"><span class="chrome">Vidéo de A à Z</span></div>
+      <p class="pack-sub">Je gère tout — du clip brut<br>jusqu'à la vidéo finale publiable.</p>
+      <div class="pack-price"><span class="pack-price-sym">€</span><span class="pack-price-num"><span class="gold-text">15</span></span></div>
+      <div class="pack-price-note">par vidéo</div>
+      <ul class="pack-list">
+        <li class="yes">Prise de clips incluse</li>
+        <li class="yes">Montage complet</li>
+        <li class="yes">Effets &amp; transitions pro</li>
+        <li class="yes">Musique &amp; sound design</li>
+        <li class="yes">Sous-titres animés</li>
+        <li class="yes">Vidéo prête à publier</li>
+      </ul>
+      <a href="#contact" class="pack-btn">Choisir ce pack</a>
+    </div>
+
+    <!-- Trailer FiveM -->
+    <div class="pack featured">
+      <div class="pack-top-line"></div>
+      <div class="pack-label hot">🎥 Premium</div>
+      <div class="pack-name"><span class="chrome">Trailer FiveM</span></div>
+      <p class="pack-sub">Trailer cinématique pour ton serveur<br>ou ton personnage FiveM.</p>
+      <div class="pack-price"><span class="pack-price-sym">€</span><span class="pack-price-num"><span class="gold-text">55</span></span></div>
+      <div class="pack-price-note">par minute de rendu final</div>
+      <ul class="pack-list">
+        <li class="yes">Prise de clips cinématiques</li>
+        <li class="yes">Montage épique &amp; travaillé</li>
+        <li class="yes">Color grading premium</li>
+        <li class="yes">VFX &amp; effets visuels</li>
+        <li class="yes">Sound design immersif</li>
+        <li class="yes">Rendu 4K disponible</li>
+      </ul>
+      <a href="#contact" class="pack-btn">Choisir ce pack</a>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="process">
+  <div class="reveal"><div class="section-tag">Comment ça marche</div><h2><span class="chrome">LE PROCESS</span></h2></div>
+  <div class="process-steps reveal">
+    <div class="step"><div class="step-n">01</div><div class="step-title"><span class="chrome">Contact</span></div><p class="step-desc">Tu me contactes sur Discord avec ton projet et tes idées.</p></div>
+    <div class="step"><div class="step-n">02</div><div class="step-title"><span class="chrome">Devis</span></div><p class="step-desc">On discute du projet, je t'envoie un devis clair et rapide.</p></div>
+    <div class="step"><div class="step-n">03</div><div class="step-title"><span class="chrome">Production</span></div><p class="step-desc">Je clip et monte ta vidéo avec soin, effets et color grading.</p></div>
+    <div class="step"><div class="step-n">04</div><div class="step-title"><span class="chrome">Livraison</span></div><p class="step-desc">Tu reçois ta vidéo finale. Révisions incluses jusqu'à satisfaction.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="contact">
+  <div class="section-tag" style="justify-content:center">Contact</div>
+  <h2><span class="chrome">TRAVAILLONS<br>ENSEMBLE</span></h2>
+  <p>Un projet FiveM en tête ? N'hésite pas à me contacter, je réponds rapidement.</p>
+  <div class="contact-btns">
+    <a href="https://discord.gg/zvJGYG3ASV" class="btn btn-gold">Discord</a>
+  </div>
+  <div class="contact-info-list">
+    <a href="https://discord.gg/zvJGYG3ASV" class="contact-item"><div class="contact-item-icon">💬</div>Discord : parazyte_ttv</a>
+    <a href="mailto:parazyteek@gmail.com" class="contact-item"><div class="contact-item-icon">📧</div>parazyteek@gmail.com</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo"><span class="gold-text">PARAZYTE</span></div>
+  <span>Monteur &amp; Clipeur FiveM RP</span>
+  <span>© 2026 — Tous droits réservés</span>
+</footer>
+
+<script>
+  const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function loop(){ rx+=(mx-rx)*.1; ry+=(my-ry)*.1; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  const obs = new IntersectionObserver(entries => { entries.forEach((e,i)=>{ if(e.isIntersecting) setTimeout(()=>e.target.classList.add('in'),i*80); }); },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
