@@ -78,11 +78,14 @@
 
     .nav-links {
       display: flex;
-      gap: 0.25rem;
+      gap: 0.5rem;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .nav-link {
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1.25rem;
       font-size: 0.875rem;
       font-weight: 500;
       color: var(--gray-400);
@@ -93,12 +96,12 @@
 
     .nav-link:hover {
       color: var(--white);
-      background: var(--gray-800);
     }
 
     .nav-link.active {
       color: var(--white);
       background: var(--gray-800);
+      box-shadow: inset 0 0 0 1px var(--gray-700);
     }
 
     .nav-toggle {
@@ -135,22 +138,22 @@
         top: 64px;
         left: 0;
         right: 0;
+        transform: translateX(0) translateY(-10px);
         flex-direction: column;
         background: rgba(10, 10, 10, 0.95);
         backdrop-filter: blur(16px);
         padding: 0.5rem 1rem 1rem;
         border-bottom: 1px solid var(--gray-800);
-        transform: translateY(-10px);
         opacity: 0;
         pointer-events: none;
         transition: all 0.25s ease;
       }
       .nav-links.open {
-        transform: translateY(0);
+        transform: translateX(0) translateY(0);
         opacity: 1;
         pointer-events: auto;
       }
-      .nav-link { padding: 0.75rem 1rem; border-radius: var(--radius-md); }
+      .nav-link { padding: 0.75rem 1.25rem; border-radius: var(--radius-md); }
     }
 
     /* ─── Tab Panels ─── */
