@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parazyte — Monteur Vidéo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="top-nav" id="topNav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" data-i18n="app.brand">Parazyte</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#" class="nav-link active" data-tab="accueil" data-i18n="nav.home">Accueil</a>
+        <a href="#" class="nav-link" data-tab="tarifs" data-i18n="nav.pricing">Tarifs</a>
+        <a href="#" class="nav-link" data-tab="portfolio" data-i18n="nav.portfolio">Portfolio</a>
+        <a href="#" class="nav-link" data-tab="contact" data-i18n="nav.contact">Contact</a>
+        <a href="#" class="nav-link" data-tab="faq" data-i18n="nav.faq">FAQ</a>
+        <a href="#" class="nav-link" data-tab="commandes" data-i18n="nav.orders">Commandes</a>
+        <a href="#" class="nav-link" data-tab="compte" data-i18n="nav.account">Compte</a>
+        <a href="#" class="nav-link hidden" data-tab="logs" id="navLogs" data-i18n="nav.logs">Logs</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Tab Panels -->
+  <main class="main-content">
+
+    <!-- ACCUEIL -->
+    <section class="tab-panel active" id="panel-accueil">
+      <header class="hero">
+        <span class="hero-eyebrow" data-i18n="app.eyebrow">Monteur Vidéo &amp; Réalisateur</span>
+        <h1 class="hero-title" data-i18n="app.title">Parazyte</h1>
+        <p class="hero-subtitle" data-i18n="app.subtitle">Monteur vidéo créatif & réalisateur de clips Rockstar Editor. TikTok, YouTube, FiveM — je donne vie à tes idées.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-tab-nav="tarifs" data-i18n="app.cta_pricing">Voir les Tarifs</button>
+          <button class="btn btn-outline" data-tab-nav="contact" data-i18n="app.cta_contact">Me Contacter</button>
+        </div>
+      </header>
+
+      <div class="section fade-in">
+        <h2 class="section-title" data-i18n="app.section1_title">Ce que je fais</h2>
+        <p class="section-text" data-i18n="app.section1_text">Montage vidéo professionnel pour tous formats : clips TikTok, vidéos YouTube, trailers FiveM et clips Rockstar Editor. Chaque projet est traité avec soin et livré dans les délais.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section fade-in">
+        <h2 class="section-title" data-i18n="app.section2_title">Mes Services</h2>
+        <div class="services-grid">
+          <article class="card">
+            <div class="card-icon">🎬</div>
+            <h3 class="card-title" data-i18n="app.section2_item1">Montage TikTok / Shorts</h3>
+            <p class="card-desc" data-i18n="app.section2_item1_desc">Clips verticaux, tendances, transitions dynamiques.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">▶️</div>
+            <h3 class="card-title" data-i18n="app.section2_item2">Montage YouTube</h3>
+            <p class="card-desc" data-i18n="app.section2_item2_desc">Intros, outros, effets pro — contenu long format.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🎮</div>
+            <h3 class="card-title" data-i18n="app.section2_item3">Trailers FiveM</h3>
+            <p class="card-desc" data-i18n="app.section2_item3_desc">Cinématiques RP, trailers serveur, ambiance immersive.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">⭐</div>
+            <h3 class="card-title" data-i18n="app.section2_item4">Clips Rockstar Editor</h3>
+            <p class="card-desc" data-i18n="app.section2_item4_desc">Réalisation & montage de clips GTA avec Rockstar Editor.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARIFS -->
+    <section class="tab-panel" id="panel-tarifs">
+      <div class="section">
+        <h2 class="section-title fade-in" data-i18n="pricing.title">Mes Tarifs</h2>
+        <p class="section-text fade-in" data-i18n="pricing.subtitle">Clique sur un format pour voir les offres détaillées.</p>
+        <div class="pricing-grid">
+
+          <!-- TikTok / Shorts -->
+          <article class="pricing-card pricing-clickable fade-in" data-pricing="tiktok">
+            <div class="pricing-card-front">
+              <span class="pricing-badge" data-i18n="pricing.badge_tiktok">TikTok / Shorts</span>
+              <div class="pricing-card-icon">🎬</div>
+              <h3 class="pricing-card-title" data-i18n="pricing.tiktok_title">Format TikTok</h3>
+              <p class="pricing-card-desc" data-i18n="pricing.tiktok_desc">Montage vertical, tendances, transitions rapides.</p>
+              <span class="pricing-card-from" data-i18n="pricing.from">À partir de</span>
+              <div class="pricing-price">10€</div>
+              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
+            </div>
+            <div class="pricing-card-details">
+              <div class="pricing-tier">
+                <span class="pricing-tier-name" data-i18n="pricing.standard">Standard</span>
+                <span class="pricing-tier-price">10€</span>
+                <span class="pricing-tier-info" data-i18n="pricing.tiktok_std">Montage vidéo • Livraison 72h</span>
+              </div>
+              <div class="pricing-tier">
+                <span class="pricing-tier-name" data-i18n="pricing.pro">Pro</span>
+                <span class="pricing-tier-price">15€</span>
+                <span class="pricing-tier-info" data-i18n="pricing.tiktok_pro">Transitions & effets • Livraison 48h • 1 retouche</span>
+              </div>
+              <div class="pricing-tier">
+                <span class="pricing-tier-name" data-i18n="pricing.premium">Premium</span>
+                <span class="pricing-tier-price">20€</span>
+                <span class="pricing-tier-info" data-i18n="pricing.tiktok_prem">Montage complet • Livraison 24h • Retouches illimitées</span>
+              </div>
+              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta">Commander</button>
+            </div>
+          </article>
+
+          <!-- YouTube -->
+          <article class="pricing-card pricing-clickable pricing-featured fade-in" data-pricing="youtube">
+            <div class="pricing-card-front">
+              <span class="pricing-badge" data-i18n="pricing.badge_youtube">YouTube</span>
+              <div class="pricing-card-icon">▶️</div>
+              <h3 class="pricing-card-title" data-i18n="pricing.youtube_title">Format YouTube</h3>
+              <p class="pricing-card-desc" data-i18n="pricing.youtube_desc">Montage horizontal, intro, outro, effets pro.</p>
+              <div class="pricing-price pricing-price-deviz" data-i18n="pricing.yt_deviz">Sur devis</div>
+              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour plus d'infos ↓</span>
+            </div>
+            <div class="pricing-card-details">
+              <div class="pricing-note" data-i18n="pricing.yt_deviz_note">Chaque projet YouTube est unique. Contacte-moi pour un devis personnalisé selon la durée, la complexité et les effets demandés.</div>
+              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta_deviz">Demander un devis</button>
+            </div>
+          </article>
+
+          <!-- FiveM Trailer -->
+          <article class="pricing-card pricing-clickable fade-in" data-pricing="fivem">
+            <div class="pricing-card-front">
+              <span class="pricing-badge" data-i18n="pricing.badge_fivem">FiveM</span>
+              <div class="pricing-card-icon">🎮</div>
+              <h3 class="pricing-card-title" data-i18n="pricing.fivem_title">Trailer FiveM</h3>
+              <p class="pricing-card-desc" data-i18n="pricing.fivem_desc">Cinématiques, ambiance RP, trailer serveur.</p>
+              <span class="pricing-card-from" data-i18n="pricing.fivem_from">Tarif</span>
+              <div class="pricing-price">40€ <small data-i18n="pricing.fivem_per_min">/ minute</small></div>
+              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
+            </div>
+            <div class="pricing-card-details">
+              <div class="pricing-tier pricing-tier-highlight">
+                <span class="pricing-tier-name" data-i18n="pricing.fivem_rate_label">Tarif</span>
+                <span class="pricing-tier-price">40€ <small data-i18n="pricing.fivem_per_min">/ minute</small></span>
+                <span class="pricing-tier-info" data-i18n="pricing.fivem_rate_desc">Cinématiques, ambiance RP, trailer serveur</span>
+              </div>
+              <div class="pricing-note" data-i18n="pricing.fivem_note">Prix calculé sur la durée finale de la vidéo.</div>
+              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta">Commander</button>
+            </div>
+          </article>
+
+          <!-- Rockstar Editor -->
+          <article class="pricing-card pricing-clickable fade-in" data-pricing="rockstar">
+            <div class="pricing-card-front">
+              <span class="pricing-badge" data-i18n="pricing.badge_rockstar">Rockstar Editor</span>
+              <div class="pricing-card-icon">⭐</div>
+              <h3 class="pricing-card-title" data-i18n="pricing.rockstar_title">Clip Rockstar Editor</h3>
+              <p class="pricing-card-desc" data-i18n="pricing.rockstar_desc">Réalisation & montage de clips GTA via Rockstar Editor.</p>
+              <span class="pricing-card-from" data-i18n="pricing.from">À partir de</span>
+              <div class="pricing-price">3€ <small data-i18n="pricing.rockstar_per_clip">/ clip</small></div>
+              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
+            </div>
+            <div class="pricing-card-details">
+              <div class="pricing-tier pricing-tier-highlight">
+                <span class="pricing-tier-name" data-i18n="pricing.rockstar_rate_label">Tarif</span>
+                <span class="pricing-tier-price">3€ <small data-i18n="pricing.rockstar_per_clip">/ clip</small></span>
+                <span class="pricing-tier-info" data-i18n="pricing.rockstar_rate_desc">Réalisation, montage & effets via Rockstar Editor</span>
+              </div>
+              <div class="pricing-note" data-i18n="pricing.rockstar_note">Prix par clip produit. Réductions possibles pour les commandes en série.</div>
+              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta">Commander</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section class="tab-panel" id="panel-portfolio">
+      <div class="section">
+        <h2 class="section-title fade-in" data-i18n="portfolio.title">Portfolio</h2>
+        <p class="section-text fade-in" data-i18n="portfolio.subtitle">Une sélection de mes réalisations vidéo.</p>
+
+        <!-- Admin Controls -->
+        <div class="admin-controls hidden" id="adminControls">
+          <div class="admin-badge-bar">
+            <span class="admin-badge-icon">👑</span>
+            <span class="admin-badge-text" data-i18n="admin.badge">Admin</span>
+          </div>
+          <button class="btn btn-primary btn-sm" id="addVideoBtn" data-i18n="admin.add_video">+ Ajouter une vidéo</button>
+        </div>
+
+        <!-- Add Video Form -->
+        <div class="admin-add-form hidden" id="addVideoForm">
+          <h3 class="admin-form-title" data-i18n="admin.add_title">Ajouter une vidéo</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="video-type" data-i18n="admin.video_type">Type</label>
+              <select id="video-type" class="form-input">
+                <option value="tiktok">TikTok / Shorts</option>
+                <option value="youtube">YouTube</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="video-title" data-i18n="admin.video_title_label">Titre</label>
+              <input type="text" id="video-title" class="form-input" placeholder="Montage @pseudo" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="video-url" data-i18n="admin.video_url">Lien de la vidéo</label>
+            <input type="url" id="video-url" class="form-input" placeholder="https://www.tiktok.com/..." required>
+          </div>
+          <div class="form-group">
+            <label for="video-cat" data-i18n="admin.video_cat_label">Catégorie affichée</label>
+            <input type="text" id="video-cat" class="form-input" placeholder="TikTok / Shorts">
+          </div>
+          <div class="admin-form-actions">
+            <button class="btn btn-primary" id="confirmAddVideo" data-i18n="admin.confirm_add">Ajouter</button>
+            <button class="btn btn-outline" id="cancelAddVideo" data-i18n="admin.cancel">Annuler</button>
+          </div>
+        </div>
+
+        <!-- Custom Videos (admin) -->
+        <div class="hidden" id="customVideosSection">
+          <h3 class="portfolio-section-label fade-in" data-i18n="admin.custom_section">🎬 Vidéos ajoutées</h3>
+          <div class="portfolio-grid" id="customVideosGrid"></div>
+        </div>
+
+        <!-- TikTok / Shorts -->
+        <h3 class="portfolio-section-label fade-in">🎬 TikTok / Shorts</h3>
+        <div class="portfolio-grid">
+          <a href="https://www.tiktok.com/@tbn_fa/video/7636492367951924502" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @tbn_fa</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@storm.life.fa/video/7640229913152343318" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @storm.life.fa</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@storm.life.fa/video/7637577172995132694" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Clip @storm.life.fa</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@hervanarp/video/7640427593006583073" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @hervanarp</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@hervanarp/video/7640923170291338529" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Clip @hervanarp</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7633103044967664918" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @ramiamiaww_clips</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7630882677863845142" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Clip @ramiamiaww_clips</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7630508702310698262" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @ramiamiaww_clips</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7629392823103671574" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Clip @ramiamiaww_clips</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+        </div>
+
+        <h3 class="portfolio-section-label fade-in" style="margin-top: 3rem;">🎬 @eastborn.fa1</h3>
+        <div class="portfolio-grid">
+          <a href="https://www.tiktok.com/@eastborn.fa1/video/7639762865750117664" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @eastborn.fa1</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@eastborn.fa1/video/7642013973478444321" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @eastborn.fa1</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@asgardfa/video/7631486256601484566" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @asgardfa</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+          <a href="https://www.tiktok.com/@.wawak0/video/7647932130856602902" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="tiktok">
+            <div class="portfolio-img" data-label="TikTok">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage @.wawak0</h3>
+            <p class="portfolio-cat">TikTok / Shorts</p>
+          </a>
+        </div>
+
+        <!-- YouTube -->
+        <h3 class="portfolio-section-label fade-in" style="margin-top: 3rem;">▶️ YouTube</h3>
+        <div class="portfolio-grid portfolio-grid-wide">
+          <a href="https://www.youtube.com/watch?v=xQv5bDGwK9M" target="_blank" rel="noopener" class="portfolio-item portfolio-item-wide fade-in" data-type="youtube">
+            <div class="portfolio-img portfolio-img-wide" data-label="YouTube">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage YouTube</h3>
+            <p class="portfolio-cat">YouTube — Format long</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Video Lightbox -->
+      <div class="lightbox hidden" id="videoLightbox">
+        <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+        <div class="lightbox-content">
+          <button class="lightbox-close" id="lightboxClose" aria-label="Fermer">✕</button>
+          <div class="lightbox-video" id="lightboxVideo"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="tab-panel" id="panel-contact">
+      <div class="section">
+        <h2 class="section-title fade-in" data-i18n="contact.title">Contact</h2>
+        <p class="section-text fade-in" data-i18n="contact.subtitle">Dis-moi ce dont tu as besoin, je te réponds vite.</p>
+        <form class="contact-form fade-in" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name" data-i18n="contact.name">Nom</label>
+              <input type="text" id="contact-name" class="form-input" data-i18n-placeholder="contact.name_ph" placeholder="Ton nom" required>
+            </div>
+            <div class="form-group">
+              <label for="contact-email" data-i18n="contact.email">Email</label>
+              <input type="email" id="contact-email" class="form-input" data-i18n-placeholder="contact.email_ph" placeholder="ton@email.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contact-service" data-i18n="contact.service">Service souhaité</label>
+            <select id="contact-service" class="form-input">
+              <option value="" data-i18n="contact.service_default">Choisir un service</option>
+              <option value="tiktok" data-i18n="pricing.badge_tiktok">TikTok / Shorts</option>
+              <option value="youtube" data-i18n="pricing.badge_youtube">YouTube</option>
+              <option value="fivem" data-i18n="pricing.badge_fivem">FiveM</option>
+              <option value="rockstar" data-i18n="pricing.badge_rockstar">Rockstar Editor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="contact-msg" data-i18n="contact.message">Message</label>
+            <textarea id="contact-msg" class="form-input" rows="5" data-i18n-placeholder="contact.message_ph" placeholder="Décris ton projet..." required></textarea>
+          </div>
+          <button type="submit" id="contactSubmit" class="btn btn-primary btn-full" data-i18n="contact.send">Envoyer</button>
+          <div class="form-loading hidden" id="formLoading">
+            <div class="spinner"></div>
+            <span data-i18n="contact.sending">Envoi en cours...</span>
+          </div>
+          <div class="form-success hidden" id="formSuccess">
+            <span data-i18n="contact.success">Merci ! Ton message a bien été envoyé. Je te réponds vite.</span>
+          </div>
+          <div class="form-error hidden" id="formError">
+            <span data-i18n="contact.error">Oups, une erreur est survenue. Réessaie ou contacte-moi directement sur Discord.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="tab-panel" id="panel-faq">
+      <div class="section">
+        <h2 class="section-title fade-in" data-i18n="faq.title">Questions Fréquentes</h2>
+        <p class="section-text fade-in" data-i18n="faq.subtitle">Tout ce que tu dois savoir.</p>
+        <div class="faq-list">
+          <details class="faq-item fade-in">
+            <summary data-i18n="faq.q1">Combien de temps pour un montage ?</summary>
+            <p data-i18n="faq.a1">TikTok & Shorts : 24h à 72h. YouTube : 48h à 72h. FiveM : selon la durée. Rockstar Editor : sous 48h en général.</p>
+          </details>
+          <details class="faq-item fade-in">
+            <summary data-i18n="faq.q2">Est-ce que tu fais des retouches ?</summary>
+            <p data-i18n="faq.a2">Oui ! Chaque formule inclut des retouches. La formule Pro offre 1 retouche, la formule Premium des retouches illimitées.</p>
+          </details>
+          <details class="faq-item fade-in">
+            <summary data-i18n="faq.q3">Comment on travaille ensemble ?</summary>
+            <p data-i18n="faq.a3">Tu m'envoies tes rushes/footage, je m'occupe du reste. On échange par Discord ou email, et je te livré le résultat final.</p>
+          </details>
+          <details class="faq-item fade-in">
+            <summary data-i18n="faq.q4">Quels formats de livraison ?</summary>
+            <p data-i18n="faq.a4">MP4 en haute qualité (1080p ou 4K selon le projet). Format vertical ou horizontal selon le besoin.</p>
+          </details>
+          <details class="faq-item fade-in">
+            <summary data-i18n="faq.q5">Comment se passe le paiement ?</summary>
+            <p data-i18n="faq.a5">Paiement à la livraison ou 50% à la commande pour les gros projets. Paiement par PayPal, virement ou carte.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMANDES -->
+    <section class="tab-panel" id="panel-commandes">
+      <div class="section">
+        <div class="orders-page-header">
+          <div>
+            <h2 class="section-title fade-in" data-i18n="orders.title">Commandes</h2>
+            <p class="section-text fade-in" data-i18n="orders.subtitle">Suivi de tes projets vidéo en temps réel.</p>
+          </div>
+          <button class="btn btn-primary fade-in" id="newOrderBtn" data-i18n="orders.new_order">+ Nouvelle commande</button>
+        </div>
+
+        <div class="orders-login-prompt hidden" id="ordersLoginPrompt">
+          <span class="orders-empty-icon">🔐</span>
+          <p data-i18n="orders.login_prompt">Connecte-toi pour gérer tes commandes.</p>
+          <button class="btn btn-primary" data-tab-nav="compte" data-i18n="account.login">Connexion</button>
+        </div>
+
+        <div class="order-form-card hidden" id="newOrderForm">
+          <h3 class="order-form-title" data-i18n="orders.form_title">Nouvelle commande</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="order-service" data-i18n="orders.service">Service</label>
+              <select id="order-service" class="form-input">
+                <option value="tiktok">TikTok / Shorts</option>
+                <option value="youtube">YouTube</option>
+                <option value="fivem">FiveM</option>
+                <option value="rockstar">Rockstar Editor</option>
+              </select>
+            </div>
+            <div class="form-group" id="orderTierGroup">
+              <label for="order-tier" data-i18n="orders.form_tier">Formule</label>
+              <select id="order-tier" class="form-input">
+                <option value="standard">Standard</option>
+                <option value="pro">Pro</option>
+                <option value="premium">Premium</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="order-desc" data-i18n="orders.form_desc">Description du projet</label>
+            <textarea id="order-desc" class="form-input" rows="4" data-i18n-placeholder="orders.form_desc_ph" placeholder="Décris ton projet, donne le plus de détails possible..."></textarea>
+          </div>
+          <div class="order-form-actions">
+            <button class="btn btn-primary" id="confirmOrder" data-i18n="orders.form_submit">Envoyer la commande</button>
+            <button class="btn btn-outline" id="cancelOrder" data-i18n="admin.cancel">Annuler</button>
+          </div>
+        </div>
+
+        <div class="orders-list" id="ordersList"></div>
+
+        <div class="orders-empty" id="ordersEmpty">
+          <span class="orders-empty-icon">📦</span>
+          <p data-i18n="orders.empty">Aucune commande pour le moment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPTE -->
+    <section class="tab-panel" id="panel-compte">
+      <div class="section auth-section">
+
+        <!-- Not logged in -->
+        <div id="authGuest">
+          <h2 class="section-title fade-in" data-i18n="account.title">Mon Compte</h2>
+          <p class="section-text fade-in" data-i18n="account.subtitle">Connecte-toi ou crée un compte pour suivre tes commandes.</p>
+
+          <div class="auth-tabs fade-in">
+            <button class="auth-tab active" data-auth="login" data-i18n="account.login">Connexion</button>
+            <button class="auth-tab" data-auth="register" data-i18n="account.register">Inscription</button>
+          </div>
+
+          <!-- Login Form -->
+          <form class="auth-form fade-in" id="loginForm">
+            <div class="form-group">
+              <label for="login-email" data-i18n="contact.email">Email</label>
+              <input type="email" id="login-email" class="form-input" data-i18n-placeholder="contact.email_ph" placeholder="ton@email.com" required>
+            </div>
+            <div class="form-group">
+              <label for="login-password" data-i18n="account.password">Mot de passe</label>
+              <input type="password" id="login-password" class="form-input" data-i18n-placeholder="account.password_ph" placeholder="Ton mot de passe" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" data-i18n="account.login_btn">Se connecter</button>
+            <div class="auth-error hidden" id="loginError">
+              <span data-i18n="account.login_error">Email ou mot de passe incorrect.</span>
+            </div>
+          </form>
+
+          <!-- Register Form -->
+          <form class="auth-form fade-in hidden" id="registerForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-name" data-i18n="contact.name">Nom</label>
+                <input type="text" id="reg-name" class="form-input" data-i18n-placeholder="contact.name_ph" placeholder="Ton nom" required>
+              </div>
+              <div class="form-group">
+                <label for="reg-email" data-i18n="contact.email">Email</label>
+                <input type="email" id="reg-email" class="form-input" data-i18n-placeholder="contact.email_ph" placeholder="ton@email.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="reg-password" data-i18n="account.password">Mot de passe</label>
+              <input type="password" id="reg-password" class="form-input" data-i18n-placeholder="account.password_ph" placeholder="Choisis un mot de passe" required minlength="6">
+            </div>
+            <div class="form-group">
+              <label for="reg-password2" data-i18n="account.password_confirm">Confirmer le mot de passe</label>
+              <input type="password" id="reg-password2" class="form-input" data-i18n-placeholder="account.password_confirm_ph" placeholder="Répète ton mot de passe" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" data-i18n="account.register_btn">Créer mon compte</button>
+            <div class="auth-error hidden" id="registerError">
+              <span id="registerErrorText" data-i18n="account.register_error">Une erreur est survenue.</span>
+            </div>
+            <div class="auth-success hidden" id="registerSuccess">
+              <span data-i18n="account.register_success">Compte créé ! Tu es maintenant connecté.</span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Logged in -->
+        <div id="authUser" class="hidden">
+          <div class="auth-dashboard fade-in">
+            <div class="auth-avatar">
+              <span id="avatarLetter">P</span>
+            </div>
+            <h2 class="auth-welcome" data-i18n="account.welcome">Bienvenue,</h2>
+            <p class="auth-username" id="authUsername">—</p>
+            <div class="admin-user-badge hidden" id="adminUserBadge">
+              <span>👑</span> <span data-i18n="admin.badge">Administrateur</span>
+            </div>
+            <p class="auth-email-display" id="authEmail">—</p>
+
+            <div class="auth-info-cards">
+              <div class="auth-info-card">
+                <span class="auth-info-label" data-i18n="account.member_since">Membre depuis</span>
+                <span class="auth-info-value" id="authSince">—</span>
+              </div>
+              <div class="auth-info-card">
+                <span class="auth-info-label" data-i18n="account.orders">Commandes</span>
+                <span class="auth-info-value">0</span>
+              </div>
+            </div>
+
+            <div class="auth-actions">
+              <button class="btn btn-primary btn-full" data-tab-nav="tarifs" data-i18n="account.view_pricing">Voir les Tarifs</button>
+              <button class="btn btn-outline btn-full" id="logoutBtn" data-i18n="account.logout">Se déconnecter</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LOGS (admin only) -->
+    <section class="tab-panel" id="panel-logs">
+      <div class="section">
+        <div class="logs-header">
+          <div>
+            <h2 class="section-title fade-in" data-i18n="logs.title">Journaux</h2>
+            <p class="section-text fade-in" data-i18n="logs.subtitle">Tous les événements du site en temps réel.</p>
+          </div>
+          <div class="logs-actions fade-in">
+            <button class="btn btn-outline btn-sm" id="clearLogsBtn" data-i18n="logs.clear">🗑️ Tout effacer</button>
+          </div>
+        </div>
+
+        <div class="logs-stats fade-in" id="logsStats">
+          <div class="logs-stat"><span class="logs-stat-value" id="statTotal">0</span><span class="logs-stat-label" data-i18n="logs.stat_total">Total</span></div>
+          <div class="logs-stat"><span class="logs-stat-value" id="statVisits">0</span><span class="logs-stat-label" data-i18n="logs.stat_visits">Visites</span></div>
+          <div class="logs-stat"><span class="logs-stat-value" id="statUsers">0</span><span class="logs-stat-label" data-i18n="logs.stat_users">Inscriptions</span></div>
+          <div class="logs-stat"><span class="logs-stat-value" id="statMessages">0</span><span class="logs-stat-label" data-i18n="logs.stat_messages">Messages</span></div>
+          <div class="logs-stat"><span class="logs-stat-value" id="statVideos">0</span><span class="logs-stat-label" data-i18n="logs.stat_videos">Vidéos</span></div>
+        </div>
+
+        <div class="logs-filters fade-in">
+          <button class="logs-filter active" data-filter="all" data-i18n="logs.filter_all">Tous</button>
+          <button class="logs-filter" data-filter="visit" data-i18n="logs.filter_visits">📄 Visites</button>
+          <button class="logs-filter" data-filter="auth" data-i18n="logs.filter_auth">👤 Auth</button>
+          <button class="logs-filter" data-filter="video" data-i18n="logs.filter_videos">🎬 Vidéos</button>
+          <button class="logs-filter" data-filter="contact" data-i18n="logs.filter_contact">📩 Contact</button>
+        </div>
+
+        <div class="logs-list" id="logsList">
+          <div class="logs-empty" id="logsEmpty">
+            <span class="logs-empty-icon">📋</span>
+            <p data-i18n="logs.empty">Aucun log pour le moment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p data-i18n="app.footer_text">© 2024 Parazyte — Monteur Vidéo & Réalisateur</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
