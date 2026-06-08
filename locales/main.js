@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+  /* ── Storage shim: use localStorage when miniappsAI.storage is unavailable ── */
+  if (!window.miniappsAI) {
+    window.miniappsAI = {};
+  }
+  if (!window.miniappsAI.storage) {
+    window.miniappsAI.storage = {
+      async getItem(key) { return localStorage.getItem(key); },
+      async setItem(key, value) { localStorage.setItem(key, value); },
+      async removeItem(key) { localStorage.removeItem(key); },
+    };
+  }
   const DISCORD_WEBHOOK_URL = 'https://canary.discord.com/api/webhooks/1512183878146719946/KuqpmFiE_3EdKhtZvgvI0orgWtcEslIex-qDAKeeOHhjAcaQDDWSiaah0u25KrRPgrZx';
   const ADMIN_EMAIL = 'parazyteek@gmail.com';
 
