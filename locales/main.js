@@ -187,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="order-meta">
           <span class="order-badge">${SERVICE_MAP[order.service] || order.service}</span>
           ${order.tier ? `<span class="order-tier-badge">${TIER_MAP[order.tier] || order.tier}</span>` : ''}
+          ${order.discord ? `<span class="order-discord-badge">💬 ${order.discord}</span>` : ''}
           ${isAdmin ? `<span class="order-client-badge">👤 ${order.userName} (${order.userEmail})</span>` : ''}
         </div>
         <div class="order-status ${cls}"><span class="status-dot"></span>${st}</div>
@@ -305,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const video = c.querySelector(`.order-video-url[data-oid="${oid}"]`);
         if (!status) return;
         await orderStore.updateOrder(oid, { status: status.value, videoUrl: video?.value.trim() || '' });
-        logStore.addLog('video', 'Commande mise à jour', `#${oid} → ${STATUS_MAP[status.value] || status.value}`);
+        logStore.addLog('order', 'Commande mise à jour', `#${oid} → ${STATUS_MAP[status.value] || status.value}`);
         await renderOrdersList();
       });
     });
@@ -331,17 +332,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return d.toDateString() === now.toDateString() ? t : d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' ' + t;
   }
 
-  function getLogIcon(type) { return { visit: '📄', auth: '👤', video: '🎬', contact: '📩' }[type] || '📋'; }
+  function getLogIcon(type) { return { visit: '📄', auth: '👤', video: '🎬', contact: '📩', order: '📦' }[type] || '📋'; }
 
   async function renderLogsPanel() {
     const logs = await logStore.getLogs();
     const list = document.getElementById('logsList');
     const empty = document.getElementById('logsEmpty');
     if (!list) return;
-    const c = { total: logs.length, visit: 0, auth: 0, video: 0, contact: 0 };
+    const c = { total: logs.length, visit: 0, auth: 0, video: 0, contact: 0, order: 0 };
     logs.forEach(l => { if (c[l.type] !== undefined) c[l.type]++; });
     const s = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    s('statTotal', c.total); s('statVisits', c.visit); s('statUsers', c.auth); s('statMessages', c.contact); s('statVideos', c.video);
+    s('statTotal', c.total); s('statVisits', c.visit); s('statUsers', c.auth); s('statMessages', c.contact); s('statVideos', c.video); s('statOrders', c.order);
     const filtered = currentLogFilter === 'all' ? logs : logs.filter(l => l.type === currentLogFilter);
     const sorted = [...filtered].reverse();
     if (!sorted.length) { list.innerHTML = ''; if (empty) { list.appendChild(empty); empty.style.display = ''; } return; }
@@ -478,6 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('confirmOrder')?.addEventListener('click', async () => {
     const session = await authStore.getSession();
     if (!session) return;
+    const discord = document.getElementById('order-discord').value.trim();
+    if (!discord) { alert('Indique ton pseudo Discord !'); return; }
     const service = document.getElementById('order-service').value;
     const tier = document.getElementById('order-tier').value;
     const desc = document.getElementById('order-desc').value.trim();
@@ -485,11 +488,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     await orderStore.addOrder({
       id, userEmail: session.email, userName: session.name, service,
-      tier: service === 'tiktok' ? tier : null, description: desc,
+      tier: service === 'tiktok' ? tier : null, description: desc, discord,
       status: 'pending', videoUrl: '', createdAt: Date.now(), updatedAt: Date.now(),
     });
-    logStore.addLog('contact', 'Nouvelle commande', `${session.name} — ${SERVICE_MAP[service] || service}`);
+    logStore.addLog('order', 'Nouvelle commande', `${session.name} (${discord}) — ${SERVICE_MAP[service] || service}`);
     document.getElementById('order-desc').value = '';
+    document.getElementById('order-discord').value = '';
     newOrderForm.classList.add('hidden');
     await renderOrdersList();
   });
