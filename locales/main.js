@@ -36,9 +36,52 @@ document.addEventListener('DOMContentLoaded', () => {
     async clearSession() { await miniappsAI.storage.removeItem('pz_session'); },
   };
 
+  /* ── Shared Video Storage (npoint.io) ── */
+  const NPOINT_API = 'https://api.npoint.io';
+
+  function getSharedBinId() { return localStorage.getItem('pz_shared_bin_id'); }
+
+  async function fetchSharedVideos() {
+    const binId = getSharedBinId();
+    if (!binId) return null;
+    try {
+      const res = await fetch(NPOINT_API + '/' + binId);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return Array.isArray(data.videos) ? data.videos : null;
+    } catch { return null; }
+  }
+
+  async function syncToShared(videos) {
+    const binId = getSharedBinId();
+    const url = binId ? NPOINT_API + '/' + binId : NPOINT_API;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videos }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.id) localStorage.setItem('pz_shared_bin_id', data.id);
+      }
+    } catch (e) { console.warn('[Sync] Erreur sauvegarde partagee:', e); }
+  }
+
   const videoStore = {
-    async getCustomVideos() { const r = await miniappsAI.storage.getItem('pz_custom_videos'); return r ? JSON.parse(r) : []; },
-    async saveCustomVideos(v) { await miniappsAI.storage.setItem('pz_custom_videos', JSON.stringify(v)); },
+    async getCustomVideos() {
+      const shared = await fetchSharedVideos();
+      if (shared) {
+        await miniappsAI.storage.setItem('pz_custom_videos', JSON.stringify(shared));
+        return shared;
+      }
+      const r = await miniappsAI.storage.getItem('pz_custom_videos');
+      return r ? JSON.parse(r) : [];
+    },
+    async saveCustomVideos(v) {
+      await miniappsAI.storage.setItem('pz_custom_videos', JSON.stringify(v));
+      await syncToShared(v);
+    },
   };
 
   const orderStore = {
@@ -135,8 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function closeLightbox() { if (!lightbox) return; lightboxVideo.innerHTML = ''; lightbox.classList.add('hidden'); document.body.style.overflow = ''; }
 
-  /* ── Custom Videos (admin) ── */
+  /* ── Custom Videos (visible to all, admin-only controls) ── */
   async function renderCustomVideos() {
+    const session = await authStore.getSession();
+    const isAdmin = session?.email === ADMIN_EMAIL;
     const videos = await videoStore.getCustomVideos();
     const grid = document.getElementById('customVideosGrid');
     const section = document.getElementById('customVideosSection');
@@ -145,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     section.classList.remove('hidden');
     grid.innerHTML = videos.map(v => `
       <a href="${v.url}" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="${v.type}" data-custom-id="${v.id}">
-        <button class="admin-delete-btn" data-delete-id="${v.id}" aria-label="Supprimer">✕</button>
+        ${isAdmin ? '<button class="admin-delete-btn" data-delete-id="' + v.id + '" aria-label="Supprimer">✕</button>' : ''}
         <div class="portfolio-img" data-label="${v.type === 'youtube' ? 'YouTube' : 'TikTok'}"><div class="portfolio-play">▶</div></div>
         <h3 class="portfolio-name">${v.title}</h3>
         <p class="portfolio-cat">${v.category}</p>
@@ -186,9 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="order-header">
         <div class="order-meta">
           <span class="order-badge">${SERVICE_MAP[order.service] || order.service}</span>
-          ${order.tier ? `<span class="order-tier-badge">${TIER_MAP[order.tier] || order.tier}</span>` : ''}
-          ${order.discord ? `<span class="order-discord-badge">💬 ${order.discord}</span>` : ''}
-          ${isAdmin ? `<span class="order-client-badge">👤 ${order.userName} (${order.userEmail})</span>` : ''}
+          ${order.tier ? '<span class="order-tier-badge">' + (TIER_MAP[order.tier] || order.tier) + '</span>' : ''}
+          ${order.discord ? '<span class="order-discord-badge">💬 ' + order.discord + '</span>' : ''}
+          ${isAdmin ? '<span class="order-client-badge">👤 ' + order.userName + ' (' + order.userEmail + ')</span>' : ''}
         </div>
         <div class="order-status ${cls}"><span class="status-dot"></span>${st}</div>
       </div>
@@ -207,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <button class="btn btn-primary btn-sm order-save-btn" data-oid="${order.id}">💾 Sauvegarder</button>
       </div>` : ''}
-      ${order.status === 'done' && order.videoUrl ? `<div class="order-delivery"><div class="delivery-banner"><span>✅ Livraison prête !</span><a href="${order.videoUrl}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Voir la vidéo</a></div></div>` : ''}
+      ${order.status === 'done' && order.videoUrl ? '<div class="order-delivery"><div class="delivery-banner"><span>✅ Livraison prête !</span><a href="' + order.videoUrl + '" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Voir la vidéo</a></div></div>' : ''}
       <button class="btn btn-outline btn-sm chat-toggle-btn" data-oid="${order.id}">💬 Discussion</button>
       <div class="order-chat hidden" data-chat-for="${order.id}">
         <div class="chat-messages" data-msgs-for="${order.id}"></div>
@@ -221,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function renderChatMessages(orderId) {
     const messages = await chatStore.getMessages(orderId);
-    const el = document.querySelector(`[data-msgs-for="${orderId}"]`);
+    const el = document.querySelector('[data-msgs-for="' + orderId + '"]');
     if (!el) return;
     if (!messages.length) { el.innerHTML = '<div class="chat-empty"><p>💬 Aucun message encore.</p></div>'; return; }
     const session = await authStore.getSession();
@@ -229,11 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
     el.innerHTML = messages.map(msg => {
       const mine = msg.senderEmail === email;
       const time = new Date(msg.ts).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      return `<div class="chat-msg ${msg.isAdmin ? 'chat-msg-admin' : 'chat-msg-client'} ${mine ? 'chat-msg-mine' : ''}">
-        <span class="chat-sender">${msg.senderName}${msg.isAdmin ? ' 👑' : ''}</span>
-        <p class="chat-text">${msg.text}</p>
-        <span class="chat-time">${time}</span>
-      </div>`;
+      return '<div class="chat-msg ' + (msg.isAdmin ? 'chat-msg-admin' : 'chat-msg-client') + ' ' + (mine ? 'chat-msg-mine' : '') + '">' +
+        '<span class="chat-sender">' + msg.senderName + (msg.isAdmin ? ' 👑' : '') + '</span>' +
+        '<p class="chat-text">' + msg.text + '</p>' +
+        '<span class="chat-time">' + time + '</span>' +
+      '</div>';
     }).join('');
     el.scrollTop = el.scrollHeight;
   }
@@ -277,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     c.querySelectorAll('.chat-toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const chat = c.querySelector(`[data-chat-for="${btn.dataset.oid}"]`);
+        const chat = c.querySelector('[data-chat-for="' + btn.dataset.oid + '"]');
         if (chat) { chat.classList.toggle('hidden'); if (!chat.classList.contains('hidden')) chat.querySelector('.chat-msg-input')?.focus(); }
       });
     });
@@ -285,28 +330,28 @@ document.addEventListener('DOMContentLoaded', () => {
     c.querySelectorAll('.chat-send-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const oid = btn.dataset.sendFor;
-        const input = c.querySelector(`[data-input-for="${oid}"]`);
+        const input = c.querySelector('[data-input-for="' + oid + '"]');
         const text = input?.value.trim(); if (!text) return;
         const session = await authStore.getSession();
         await chatStore.addMessage(oid, { senderEmail: session.email, senderName: session.name, isAdmin: session.email === ADMIN_EMAIL, text, ts: Date.now() });
         input.value = '';
         await renderChatMessages(oid);
-        logStore.addLog('contact', 'Message chat', `${session.name} → #${oid}`);
+        logStore.addLog('contact', 'Message chat', session.name + ' → #' + oid);
       });
     });
 
     c.querySelectorAll('.chat-msg-input').forEach(input => {
-      input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); c.querySelector(`[data-send-for="${input.dataset.inputFor}"]`)?.click(); } });
+      input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); c.querySelector('[data-send-for="' + input.dataset.inputFor + '"]')?.click(); } });
     });
 
     c.querySelectorAll('.order-save-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const oid = btn.dataset.oid;
-        const status = c.querySelector(`.order-status-sel[data-oid="${oid}"]`);
-        const video = c.querySelector(`.order-video-url[data-oid="${oid}"]`);
+        const status = c.querySelector('.order-status-sel[data-oid="' + oid + '"]');
+        const video = c.querySelector('.order-video-url[data-oid="' + oid + '"]');
         if (!status) return;
         await orderStore.updateOrder(oid, { status: status.value, videoUrl: video?.value.trim() || '' });
-        logStore.addLog('order', 'Commande mise à jour', `#${oid} → ${STATUS_MAP[status.value] || status.value}`);
+        logStore.addLog('order', 'Commande mise à jour', '#' + oid + ' → ' + (STATUS_MAP[status.value] || status.value));
         await renderOrdersList();
       });
     });
@@ -319,7 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('adminControls')?.classList.toggle('hidden', !isAdmin);
     document.getElementById('adminUserBadge')?.classList.toggle('hidden', !isAdmin);
     document.getElementById('navLogs')?.classList.toggle('hidden', !isAdmin);
-    if (isAdmin) { renderCustomVideos(); renderLogsPanel(); }
+    renderCustomVideos();
+    if (isAdmin) renderLogsPanel();
     renderOrdersList();
   }
 
@@ -347,11 +393,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const sorted = [...filtered].reverse();
     if (!sorted.length) { list.innerHTML = ''; if (empty) { list.appendChild(empty); empty.style.display = ''; } return; }
     if (empty) empty.style.display = 'none';
-    list.innerHTML = sorted.map(l => `<div class="log-entry" data-type="${l.type}">
-      <div class="log-icon">${getLogIcon(l.type)}</div>
-      <div class="log-body"><p class="log-action">${l.action}</p>${l.detail ? `<p class="log-detail">${l.detail}</p>` : ''}</div>
-      <span class="log-time">${formatLogTime(l.ts)}</span>
-    </div>`).join('');
+    list.innerHTML = sorted.map(l => '<div class="log-entry" data-type="' + l.type + '">' +
+      '<div class="log-icon">' + getLogIcon(l.type) + '</div>' +
+      '<div class="log-body"><p class="log-action">' + l.action + '</p>' + (l.detail ? '<p class="log-detail">' + l.detail + '</p>' : '') + '</div>' +
+      '<span class="log-time">' + formatLogTime(l.ts) + '</span>' +
+    '</div>').join('');
   }
 
   document.querySelectorAll('.logs-filter').forEach(btn => {
@@ -416,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
     users.push({ name, email, password: btoa(pw), since });
     await authStore.saveUsers(users);
     await authStore.setSession({ name, email, since });
-    logStore.addLog('auth', 'Nouvelle inscription', `${name} (${email})`);
+    logStore.addLog('auth', 'Nouvelle inscription', name + ' (' + email + ')');
     registerForm.reset(); regSuccess.classList.remove('hidden');
     setTimeout(() => updateAuthUI(), 800);
   });
@@ -431,14 +477,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = users.find(u => u.email === email && atob(u.password) === pw);
     if (!user) { loginError.classList.remove('hidden'); logStore.addLog('auth', 'Connexion échouée', email); return; }
     await authStore.setSession({ name: user.name, email: user.email, since: user.since });
-    logStore.addLog('auth', 'Connexion réussie', `${user.name} (${user.email})`);
+    logStore.addLog('auth', 'Connexion réussie', user.name + ' (' + user.email + ')');
     loginForm.reset(); updateAuthUI();
   });
 
   document.getElementById('logoutBtn')?.addEventListener('click', async () => {
     const s = await authStore.getSession();
     await authStore.clearSession();
-    logStore.addLog('auth', 'Déconnexion', s ? `${s.name} (${s.email})` : '—');
+    logStore.addLog('auth', 'Déconnexion', s ? s.name + ' (' + s.email + ')' : '—');
     updateAuthUI();
   });
 
@@ -457,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videos = await videoStore.getCustomVideos();
     videos.push({ id, type, title, url, category: cat });
     await videoStore.saveCustomVideos(videos);
-    logStore.addLog('video', 'Vidéo ajoutée', `${title} (${type})`);
+    logStore.addLog('video', 'Vidéo ajoutée', title + ' (' + type + ')');
     document.getElementById('video-title').value = '';
     document.getElementById('video-url').value = '';
     document.getElementById('video-cat').value = '';
@@ -491,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tier: service === 'tiktok' ? tier : null, description: desc, discord,
       status: 'pending', videoUrl: '', createdAt: Date.now(), updatedAt: Date.now(),
     });
-    logStore.addLog('order', 'Nouvelle commande', `${session.name} (${discord}) — ${SERVICE_MAP[service] || service}`);
+    logStore.addLog('order', 'Nouvelle commande', session.name + ' (' + discord + ') — ' + (SERVICE_MAP[service] || service));
     document.getElementById('order-desc').value = '';
     document.getElementById('order-discord').value = '';
     newOrderForm.classList.add('hidden');
@@ -523,11 +569,11 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(DISCORD_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      logStore.addLog('contact', 'Message envoyé', `${name} — ${serviceName} (${email})`);
+      logStore.addLog('contact', 'Message envoyé', name + ' — ' + serviceName + ' (' + email + ')');
       contactForm.reset(); formSuccess.classList.remove('hidden');
       setTimeout(() => formSuccess.classList.add('hidden'), 5000);
     } catch (err) {
-      logStore.addLog('contact', 'Erreur envoi message', `${name} — ${err.message}`);
+      logStore.addLog('contact', 'Erreur envoi message', name + ' — ' + err.message);
       formError.classList.remove('hidden'); setTimeout(() => formError.classList.add('hidden'), 6000);
     } finally { formLoading.classList.add('hidden'); submitBtn.disabled = false; }
   });
