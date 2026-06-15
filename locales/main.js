@@ -13,6 +13,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const DISCORD_WEBHOOK_URL = 'https://canary.discord.com/api/webhooks/1512183878146719946/KuqpmFiE_3EdKhtZvgvI0orgWtcEslIex-qDAKeeOHhjAcaQDDWSiaah0u25KrRPgrZx';
   const ADMIN_EMAIL = 'parazyteek@gmail.com';
 
+  /* ── Shared video storage config ── */
+  /* This is the npoint.io bin ID shared by ALL visitors.
+     When admin adds the first video, a bin is created automatically.
+     Admin then gives you this code and you hardcode it here. */
+  const DEFAULT_SHARED_BIN_ID = null; // e.g. 'a1b2c3d4e5f6'
+  const NPOINT_API = 'https://api.npoint.io';
+
+  function getSharedBinId() {
+    return DEFAULT_SHARED_BIN_ID || localStorage.getItem('pz_shared_bin_id');
+  }
+
+  async function fetchSharedVideos() {
+    const binId = getSharedBinId();
+    if (!binId) return [];
+    try {
+      const res = await fetch(NPOINT_API + '/' + binId);
+      if (!res.ok) return [];
+      const data = await res.json();
+      return Array.isArray(data.videos) ? data.videos : [];
+    } catch { return []; }
+  }
+
+  async function saveSharedVideos(videos) {
+    const binId = getSharedBinId();
+    const url = binId ? NPOINT_API + '/' + binId : NPOINT_API;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videos }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.id) {
+          localStorage.setItem('pz_shared_bin_id', data.id);
+          console.log('[Sync] Nouveau bin créé. Code de partage:', data.id);
+          return data.id;
+        }
+      }
+    } catch (e) { console.warn('[Sync] Erreur sauvegarde partagée:', e); }
+    return null;
+  }
+
   const navLinks = document.querySelectorAll('.nav-link[data-tab]');
   const tabPanels = document.querySelectorAll('.tab-panel');
   const navToggle = document.getElementById('navToggle');
@@ -36,51 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
     async clearSession() { await miniappsAI.storage.removeItem('pz_session'); },
   };
 
-  /* ── Shared Video Storage (npoint.io) ── */
-  const NPOINT_API = 'https://api.npoint.io';
-
-  function getSharedBinId() { return localStorage.getItem('pz_shared_bin_id'); }
-
-  async function fetchSharedVideos() {
-    const binId = getSharedBinId();
-    if (!binId) return null;
-    try {
-      const res = await fetch(NPOINT_API + '/' + binId);
-      if (!res.ok) return null;
-      const data = await res.json();
-      return Array.isArray(data.videos) ? data.videos : null;
-    } catch { return null; }
-  }
-
-  async function syncToShared(videos) {
-    const binId = getSharedBinId();
-    const url = binId ? NPOINT_API + '/' + binId : NPOINT_API;
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ videos }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.id) localStorage.setItem('pz_shared_bin_id', data.id);
-      }
-    } catch (e) { console.warn('[Sync] Erreur sauvegarde partagee:', e); }
-  }
-
   const videoStore = {
     async getCustomVideos() {
-      const shared = await fetchSharedVideos();
-      if (shared) {
-        await miniappsAI.storage.setItem('pz_custom_videos', JSON.stringify(shared));
-        return shared;
-      }
-      const r = await miniappsAI.storage.getItem('pz_custom_videos');
-      return r ? JSON.parse(r) : [];
+      return await fetchSharedVideos();
     },
     async saveCustomVideos(v) {
-      await miniappsAI.storage.setItem('pz_custom_videos', JSON.stringify(v));
-      await syncToShared(v);
+      const newBinId = await saveSharedVideos(v);
+      if (newBinId) updateSyncPanel(newBinId);
     },
   };
 
@@ -170,15 +175,57 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxClose = document.getElementById('lightboxClose');
   const lightboxBackdrop = document.getElementById('lightboxBackdrop');
 
-  function extractYouTubeId(url) { const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/); return m ? m[1] : null; }
+  function extractYouTubeId(url) {
+    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+
   function openLightbox(videoId) {
     if (!lightbox || !videoId) return;
-    lightboxVideo.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    lightboxVideo.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
     lightbox.classList.remove('hidden'); document.body.style.overflow = 'hidden';
   }
-  function closeLightbox() { if (!lightbox) return; lightboxVideo.innerHTML = ''; lightbox.classList.add('hidden'); document.body.style.overflow = ''; }
 
-  /* ── Custom Videos (visible to all, admin-only controls) ── */
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightboxVideo.innerHTML = ''; lightbox.classList.add('hidden'); document.body.style.overflow = '';
+  }
+
+  /* ── Admin Sync Panel ── */
+  function updateSyncPanel(binId) {
+    const el = document.getElementById('syncCodeDisplay');
+    if (el) el.textContent = binId || 'Aucun — ajoute ta première vidéo';
+  }
+
+  document.getElementById('syncCopyBtn')?.addEventListener('click', () => {
+    const binId = getSharedBinId();
+    if (binId) {
+      navigator.clipboard.writeText(binId).then(() => {
+        const btn = document.getElementById('syncCopyBtn');
+        btn.textContent = '✅ Copié !';
+        setTimeout(() => { btn.textContent = '📋 Copier le code'; }, 2000);
+      });
+    }
+  });
+
+  document.getElementById('syncApplyBtn')?.addEventListener('click', async () => {
+    const input = document.getElementById('syncCodeInput');
+    const code = input?.value.trim();
+    if (!code) { alert('Entre un code de sync.'); return; }
+    try {
+      const res = await fetch(NPOINT_API + '/' + code);
+      if (!res.ok) { alert('Code invalide.'); return; }
+      const data = await res.json();
+      if (!Array.isArray(data.videos)) { alert('Ce code ne contient pas de vidéos.'); return; }
+      localStorage.setItem('pz_shared_bin_id', code);
+      updateSyncPanel(code);
+      input.value = '';
+      alert('✅ Sync activé ! ' + data.videos.length + ' vidéo(s) chargée(s).');
+      renderCustomVideos();
+    } catch { alert('Erreur de connexion.'); }
+  });
+
+  /* ── Custom Videos (visible to ALL visitors, admin-only controls) ── */
   async function renderCustomVideos() {
     const session = await authStore.getSession();
     const isAdmin = session?.email === ADMIN_EMAIL;
@@ -188,13 +235,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!grid || !section) return;
     if (!videos.length) { section.classList.add('hidden'); grid.innerHTML = ''; return; }
     section.classList.remove('hidden');
-    grid.innerHTML = videos.map(v => `
-      <a href="${v.url}" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="${v.type}" data-custom-id="${v.id}">
-        ${isAdmin ? '<button class="admin-delete-btn" data-delete-id="' + v.id + '" aria-label="Supprimer">✕</button>' : ''}
-        <div class="portfolio-img" data-label="${v.type === 'youtube' ? 'YouTube' : 'TikTok'}"><div class="portfolio-play">▶</div></div>
-        <h3 class="portfolio-name">${v.title}</h3>
-        <p class="portfolio-cat">${v.category}</p>
-      </a>`).join('');
+    grid.innerHTML = videos.map(function(v) {
+      var deleteBtn = isAdmin ? '<button class="admin-delete-btn" data-delete-id="' + v.id + '" aria-label="Supprimer">✕</button>' : '';
+      var label = v.type === 'youtube' ? 'YouTube' : 'TikTok';
+      return '<a href="' + v.url + '" target="_blank" rel="noopener" class="portfolio-item fade-in" data-type="' + v.type + '" data-custom-id="' + v.id + '">' +
+        deleteBtn +
+        '<div class="portfolio-img" data-label="' + label + '"><div class="portfolio-play">▶</div></div>' +
+        '<h3 class="portfolio-name">' + v.title + '</h3>' +
+        '<p class="portfolio-cat">' + v.category + '</p>' +
+      '</a>';
+    }).join('');
     observeFadeIns(grid);
     grid.querySelectorAll('[data-type="youtube"]').forEach(item => {
       item.addEventListener('click', e => {
@@ -224,44 +274,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const TIER_MAP = { standard: 'Standard', pro: 'Pro', premium: 'Premium' };
 
   function renderOrderCard(order, isAdmin) {
-    const st = STATUS_MAP[order.status] || STATUS_MAP.pending;
-    const cls = STATUS_CLS[order.status] || STATUS_CLS.pending;
-    const date = new Date(order.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-    return `<div class="order-card fade-in" data-order-id="${order.id}">
-      <div class="order-header">
-        <div class="order-meta">
-          <span class="order-badge">${SERVICE_MAP[order.service] || order.service}</span>
-          ${order.tier ? '<span class="order-tier-badge">' + (TIER_MAP[order.tier] || order.tier) + '</span>' : ''}
-          ${order.discord ? '<span class="order-discord-badge">💬 ' + order.discord + '</span>' : ''}
-          ${isAdmin ? '<span class="order-client-badge">👤 ' + order.userName + ' (' + order.userEmail + ')</span>' : ''}
-        </div>
-        <div class="order-status ${cls}"><span class="status-dot"></span>${st}</div>
-      </div>
-      <p class="order-desc">${order.description || 'Pas de description'}</p>
-      <span class="order-date">📅 ${date}</span>
-      ${isAdmin ? `<div class="order-admin-ctrl">
-        <div class="form-row">
-          <div class="form-group"><label>Statut</label>
-            <select class="form-input order-status-sel" data-oid="${order.id}">
-              <option value="pending"${order.status === 'pending' ? ' selected' : ''}>Pas commencé</option>
-              <option value="in_progress"${order.status === 'in_progress' ? ' selected' : ''}>En cours</option>
-              <option value="done"${order.status === 'done' ? ' selected' : ''}>Terminé</option>
-            </select></div>
-          <div class="form-group"><label>Lien vidéo</label>
-            <input type="url" class="form-input order-video-url" data-oid="${order.id}" value="${order.videoUrl || ''}" placeholder="https://..."></div>
-        </div>
-        <button class="btn btn-primary btn-sm order-save-btn" data-oid="${order.id}">💾 Sauvegarder</button>
-      </div>` : ''}
-      ${order.status === 'done' && order.videoUrl ? '<div class="order-delivery"><div class="delivery-banner"><span>✅ Livraison prête !</span><a href="' + order.videoUrl + '" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Voir la vidéo</a></div></div>' : ''}
-      <button class="btn btn-outline btn-sm chat-toggle-btn" data-oid="${order.id}">💬 Discussion</button>
-      <div class="order-chat hidden" data-chat-for="${order.id}">
-        <div class="chat-messages" data-msgs-for="${order.id}"></div>
-        <div class="chat-input-row">
-          <input type="text" class="form-input chat-msg-input" data-input-for="${order.id}" placeholder="Ton message...">
-          <button class="btn btn-primary btn-sm chat-send-btn" data-send-for="${order.id}">→</button>
-        </div>
-      </div>
-    </div>`;
+    var st = STATUS_MAP[order.status] || STATUS_MAP.pending;
+    var cls = STATUS_CLS[order.status] || STATUS_CLS.pending;
+    var date = new Date(order.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    var tierHtml = order.tier ? '<span class="order-tier-badge">' + (TIER_MAP[order.tier] || order.tier) + '</span>' : '';
+    var discordHtml = order.discord ? '<span class="order-discord-badge">💬 ' + order.discord + '</span>' : '';
+    var clientHtml = isAdmin ? '<span class="order-client-badge">👤 ' + order.userName + ' (' + order.userEmail + ')</span>' : '';
+    var adminCtrlHtml = '';
+    if (isAdmin) {
+      adminCtrlHtml = '<div class="order-admin-ctrl">' +
+        '<div class="form-row">' +
+          '<div class="form-group"><label>Statut</label>' +
+            '<select class="form-input order-status-sel" data-oid="' + order.id + '">' +
+              '<option value="pending"' + (order.status === 'pending' ? ' selected' : '') + '>Pas commencé</option>' +
+              '<option value="in_progress"' + (order.status === 'in_progress' ? ' selected' : '') + '>En cours</option>' +
+              '<option value="done"' + (order.status === 'done' ? ' selected' : '') + '>Terminé</option>' +
+            '</select></div>' +
+          '<div class="form-group"><label>Lien vidéo</label>' +
+            '<input type="url" class="form-input order-video-url" data-oid="' + order.id + '" value="' + (order.videoUrl || '') + '" placeholder="https://..."></div>' +
+        '</div>' +
+        '<button class="btn btn-primary btn-sm order-save-btn" data-oid="' + order.id + '">💾 Sauvegarder</button>' +
+      '</div>';
+    }
+    var deliveryHtml = '';
+    if (order.status === 'done' && order.videoUrl) {
+      deliveryHtml = '<div class="order-delivery"><div class="delivery-banner"><span>✅ Livraison prête !</span><a href="' + order.videoUrl + '" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Voir la vidéo</a></div></div>';
+    }
+    return '<div class="order-card fade-in" data-order-id="' + order.id + '">' +
+      '<div class="order-header">' +
+        '<div class="order-meta">' +
+          '<span class="order-badge">' + (SERVICE_MAP[order.service] || order.service) + '</span>' +
+          tierHtml + discordHtml + clientHtml +
+        '</div>' +
+        '<div class="order-status ' + cls + '"><span class="status-dot"></span>' + st + '</div>' +
+      '</div>' +
+      '<p class="order-desc">' + (order.description || 'Pas de description') + '</p>' +
+      '<span class="order-date">📅 ' + date + '</span>' +
+      adminCtrlHtml + deliveryHtml +
+      '<button class="btn btn-outline btn-sm chat-toggle-btn" data-oid="' + order.id + '">💬 Discussion</button>' +
+      '<div class="order-chat hidden" data-chat-for="' + order.id + '">' +
+        '<div class="chat-messages" data-msgs-for="' + order.id + '"></div>' +
+        '<div class="chat-input-row">' +
+          '<input type="text" class="form-input chat-msg-input" data-input-for="' + order.id + '" placeholder="Ton message...">' +
+          '<button class="btn btn-primary btn-sm chat-send-btn" data-send-for="' + order.id + '">→</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   }
 
   async function renderChatMessages(orderId) {
@@ -364,6 +422,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('adminControls')?.classList.toggle('hidden', !isAdmin);
     document.getElementById('adminUserBadge')?.classList.toggle('hidden', !isAdmin);
     document.getElementById('navLogs')?.classList.toggle('hidden', !isAdmin);
+    document.getElementById('adminSyncPanel')?.classList.toggle('hidden', !isAdmin);
+    if (isAdmin) updateSyncPanel(getSharedBinId());
     renderCustomVideos();
     if (isAdmin) renderLogsPanel();
     renderOrdersList();
@@ -385,10 +445,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('logsList');
     const empty = document.getElementById('logsEmpty');
     if (!list) return;
-    const c = { total: logs.length, visit: 0, auth: 0, video: 0, contact: 0, order: 0 };
-    logs.forEach(l => { if (c[l.type] !== undefined) c[l.type]++; });
-    const s = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    s('statTotal', c.total); s('statVisits', c.visit); s('statUsers', c.auth); s('statMessages', c.contact); s('statVideos', c.video); s('statOrders', c.order);
+    const counts = { total: logs.length, visit: 0, auth: 0, video: 0, contact: 0, order: 0 };
+    logs.forEach(l => { if (counts[l.type] !== undefined) counts[l.type]++; });
+    const setStat = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    setStat('statTotal', counts.total); setStat('statVisits', counts.visit); setStat('statUsers', counts.auth);
+    setStat('statMessages', counts.contact); setStat('statVideos', counts.video); setStat('statOrders', counts.order);
     const filtered = currentLogFilter === 'all' ? logs : logs.filter(l => l.type === currentLogFilter);
     const sorted = [...filtered].reverse();
     if (!sorted.length) { list.innerHTML = ''; if (empty) { list.appendChild(empty); empty.style.display = ''; } return; }
@@ -509,6 +570,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('video-cat').value = '';
     document.getElementById('addVideoForm').classList.add('hidden');
     renderCustomVideos();
+    const binId = getSharedBinId();
+    if (binId) {
+      alert('✅ Vidéo ajoutée !\n\n📋 Code de sync: ' + binId + '\n\nDonne ce code à MiMo pour que toutes les vidéos soient visibles par tout le monde.');
+    }
   });
 
   /* ── Orders: New Order Form ── */
@@ -578,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally { formLoading.classList.add('hidden'); submitBtn.disabled = false; }
   });
 
-  /* ── Portfolio Lightbox ── */
+  /* ── Portfolio Lightbox for static videos ── */
   document.querySelectorAll('.portfolio-item[data-type="youtube"]').forEach(item => {
     item.addEventListener('click', e => {
       e.preventDefault();
