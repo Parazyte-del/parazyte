@@ -193,6 +193,17 @@
           <button class="btn btn-primary btn-sm" id="addVideoBtn" data-i18n="admin.add_video">+ Ajouter une vidéo</button>
         </div>
 
+        <!-- Admin Sync Panel (videos shared for all) -->
+        <div class="admin-sync-panel hidden" id="adminSyncPanel">
+          <span class="admin-sync-label">🔗 Sync vidéo</span>
+          <span class="admin-sync-code" id="syncCodeDisplay">Chargement...</span>
+          <button class="btn btn-outline btn-sm" id="syncCopyBtn">📋 Copier le code</button>
+          <div class="admin-sync-input-row">
+            <input type="text" class="form-input admin-sync-input" id="syncCodeInput" placeholder="Coller un code de sync...">
+            <button class="btn btn-primary btn-sm" id="syncApplyBtn">🔗 Appliquer</button>
+          </div>
+        </div>
+
         <!-- Add Video Form -->
         <div class="admin-add-form hidden" id="addVideoForm">
           <h3 class="admin-form-title" data-i18n="admin.add_title">Ajouter une vidéo</h3>
@@ -338,6 +349,13 @@
             </div>
             <h3 class="portfolio-name">Montage YouTube</h3>
             <p class="portfolio-cat">YouTube — Format long</p>
+          </a>
+          <a href="https://youtu.be/bstB0qNTghc" target="_blank" rel="noopener" class="portfolio-item portfolio-item-wide fade-in" data-type="youtube">
+            <div class="portfolio-img portfolio-img-wide" data-label="YouTube">
+              <div class="portfolio-play">▶</div>
+            </div>
+            <h3 class="portfolio-name">Montage YouTube</h3>
+            <p class="portfolio-cat">YouTube</p>
           </a>
         </div>
       </div>
