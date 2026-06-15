@@ -175,7 +175,10 @@
     "video_cat_label": "Catégorie affichée",
     "confirm_add": "Ajouter",
     "cancel": "Annuler",
-    "custom_section": "🎬 Vidéos ajoutées"
+    "custom_section": "🎬 Vidéos ajoutées",
+    "sync_label": "🔗 Sync vidéo",
+    "sync_copy": "📋 Copier le code",
+    "sync_apply": "🔗 Appliquer"
   },
   "logs": {
     "title": "Journaux",
