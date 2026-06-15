@@ -121,7 +121,6 @@ body {
 }
 
 .nav-link.active {
-  color: var(--white);
   background: rgba(168, 85, 247, 0.2);
   color: var(--accent-light);
 }
@@ -641,6 +640,7 @@ a.portfolio-item {
   border-radius: var(--radius-xl);
   overflow: hidden;
   transition: transform 0.3s;
+  position: relative;
 }
 
 a.portfolio-item:hover { transform: translateY(-4px); }
@@ -965,14 +965,19 @@ textarea.form-input { resize: vertical; }
   border-top: 1px solid var(--border);
 }
 
-/* ─── Fade-in animation ─── */
+/* ─── Scroll reveal (safe: visible by default, animated only when JS ready) ─── */
 .fade-in {
-  opacity: 0;
-  transform: translateY(16px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.fade-in.visible {
+.js-ready .fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.js-ready .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
 }
