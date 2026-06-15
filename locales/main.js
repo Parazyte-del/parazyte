@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  /* Signal that JS is alive — CSS fade-in only hides elements when this class exists */
+  document.body.classList.add('js-ready');
+
   /* ── Storage shim: use localStorage when miniappsAI.storage is unavailable ── */
   if (!window.miniappsAI) {
     window.miniappsAI = {};
@@ -106,11 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async getMessages(orderId) { return (await this.getAll())[orderId] || []; },
     async addMessage(orderId, msg) {
       const all = await this.getAll(); if (!all[orderId]) all[orderId] = []; all[orderId].push(msg);
-      await miniappsAI.storage.setItem('pz_chats', JSON.stringify(all));
+      try { await miniappsAI.storage.setItem('pz_chats', JSON.stringify(all)); }
+      catch (e) { console.warn('[chat] storage write failed:', e); }
     },
   };
 
-  logStore.addLog('visit', 'Visite du site', window.location.href);
+  logStore.addLog('visit', 'Visite du site', window.location.href).catch(() => {});
 
   /* ── Tab Navigation ── */
   function switchTab(tabName) {
@@ -153,12 +157,30 @@ document.addEventListener('DOMContentLoaded', () => {
   navToggle.addEventListener('click', () => { navToggle.classList.toggle('open'); navLinksContainer.classList.toggle('open'); });
 
   /* ── Scroll Fade-in ── */
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
+  let fadeObserver = null;
 
-  function observeFadeIns(container) { container.querySelectorAll('.fade-in').forEach(el => observer.observe(el)); }
-  observeFadeIns(document.querySelector('.tab-panel.active'));
+  function observeFadeIns(container) {
+    if (!container || !fadeObserver) return;
+    container.querySelectorAll('.fade-in').forEach(el => {
+      if (!el.classList.contains('visible')) fadeObserver.observe(el);
+    });
+  }
+
+  /* Initialize IntersectionObserver safely — runs even if late async calls fail */
+  try {
+    fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    observeFadeIns(document.querySelector('.tab-panel.active'));
+  } catch (e) {
+    console.warn('[fade] observer failed, forcing visibility', e);
+    document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+  }
 
   /* ── Pricing Expand ── */
   document.querySelectorAll('.pricing-clickable').forEach(card => {
@@ -549,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAuthUI();
   });
 
-  updateAuthUI();
+  updateAuthUI().catch(e => { console.warn('[auth] UI init failed:', e); });
 
   /* ── Admin: Add Video ── */
   document.getElementById('addVideoBtn')?.addEventListener('click', () => document.getElementById('addVideoForm').classList.toggle('hidden'));
