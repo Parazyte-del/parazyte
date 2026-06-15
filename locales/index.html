@@ -139,13 +139,13 @@
               <h3 class="pricing-card-title" data-i18n="pricing.fivem_title">Trailer FiveM</h3>
               <p class="pricing-card-desc" data-i18n="pricing.fivem_desc">Cinématiques, ambiance RP, trailer serveur.</p>
               <span class="pricing-card-from" data-i18n="pricing.fivem_from">Tarif</span>
-              <div class="pricing-price">40€ <small data-i18n="pricing.fivem_per_min">/ minute</small></div>
+              <div class="pricing-price">55€ <small data-i18n="pricing.fivem_per_min">/ minute</small></div>
               <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
             </div>
             <div class="pricing-card-details">
               <div class="pricing-tier pricing-tier-highlight">
                 <span class="pricing-tier-name" data-i18n="pricing.fivem_rate_label">Tarif</span>
-                <span class="pricing-tier-price">40€ <small data-i18n="pricing.fivem_per_min">/ minute</small></span>
+                <span class="pricing-tier-price">55€ <small data-i18n="pricing.fivem_per_min">/ minute</small></span>
                 <span class="pricing-tier-info" data-i18n="pricing.fivem_rate_desc">Cinématiques, ambiance RP, trailer serveur</span>
               </div>
               <div class="pricing-note" data-i18n="pricing.fivem_note">Prix calculé sur la durée finale de la vidéo.</div>
@@ -364,18 +364,17 @@
               <input type="text" id="contact-name" class="form-input" data-i18n-placeholder="contact.name_ph" placeholder="Ton nom" required>
             </div>
             <div class="form-group">
-              <label for="contact-email" data-i18n="contact.email">Email</label>
-              <input type="email" id="contact-email" class="form-input" data-i18n-placeholder="contact.email_ph" placeholder="ton@email.com" required>
+              <label for="contact-email" data-i18n="contact.email_discord">Email ou Discord</label>
+              <input type="text" id="contact-email" class="form-input" data-i18n-placeholder="contact.email_discord_ph" placeholder="ton@email.com ou pseudo Discord" required>
             </div>
           </div>
           <div class="form-group">
             <label for="contact-service" data-i18n="contact.service">Service souhaité</label>
             <select id="contact-service" class="form-input">
               <option value="" data-i18n="contact.service_default">Choisir un service</option>
-              <option value="tiktok" data-i18n="pricing.badge_tiktok">TikTok / Shorts</option>
-              <option value="youtube" data-i18n="pricing.badge_youtube">YouTube</option>
-              <option value="fivem" data-i18n="pricing.badge_fivem">FiveM</option>
-              <option value="rockstar" data-i18n="pricing.badge_rockstar">Rockstar Editor</option>
+              <option value="collaboration" data-i18n="contact.service_collab">Collaboration</option>
+              <option value="autre" data-i18n="contact.service_autre">Autre</option>
+              <option value="demande_speciale" data-i18n="contact.service_special">Demande Spéciale</option>
             </select>
           </div>
           <div class="form-group">
@@ -446,6 +445,10 @@
 
         <div class="order-form-card hidden" id="newOrderForm">
           <h3 class="order-form-title" data-i18n="orders.form_title">Nouvelle commande</h3>
+          <div class="form-group">
+            <label for="order-discord"><span data-i18n="orders.discord_label">Pseudo Discord</span> <span class="required-star">*</span></label>
+            <input type="text" id="order-discord" class="form-input" data-i18n-placeholder="orders.discord_ph" placeholder="ex: parazyte#0001" required>
+          </div>
           <div class="form-row">
             <div class="form-group">
               <label for="order-service" data-i18n="orders.service">Service</label>
@@ -597,6 +600,7 @@
           <div class="logs-stat"><span class="logs-stat-value" id="statUsers">0</span><span class="logs-stat-label" data-i18n="logs.stat_users">Inscriptions</span></div>
           <div class="logs-stat"><span class="logs-stat-value" id="statMessages">0</span><span class="logs-stat-label" data-i18n="logs.stat_messages">Messages</span></div>
           <div class="logs-stat"><span class="logs-stat-value" id="statVideos">0</span><span class="logs-stat-label" data-i18n="logs.stat_videos">Vidéos</span></div>
+          <div class="logs-stat"><span class="logs-stat-value" id="statOrders">0</span><span class="logs-stat-label" data-i18n="logs.stat_orders">Commandes</span></div>
         </div>
 
         <div class="logs-filters fade-in">
@@ -605,6 +609,7 @@
           <button class="logs-filter" data-filter="auth" data-i18n="logs.filter_auth">👤 Auth</button>
           <button class="logs-filter" data-filter="video" data-i18n="logs.filter_videos">🎬 Vidéos</button>
           <button class="logs-filter" data-filter="contact" data-i18n="logs.filter_contact">📩 Contact</button>
+          <button class="logs-filter" data-filter="order" data-i18n="logs.filter_orders">📦 Commandes</button>
         </div>
 
         <div class="logs-list" id="logsList">
