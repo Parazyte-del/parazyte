@@ -965,21 +965,10 @@ textarea.form-input { resize: vertical; }
   border-top: 1px solid var(--border);
 }
 
-/* ─── Scroll reveal (safe: visible by default, animated only when JS ready) ─── */
+/* ─── Fade-in: always visible, no JS dependency ─── */
 .fade-in {
   opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.js-ready .fade-in {
-  opacity: 0;
-  transform: translateY(16px);
-}
-
-.js-ready .fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 /* ─── Auth / Account ─── */
