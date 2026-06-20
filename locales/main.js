@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  /* Signal that JS is alive — CSS fade-in only hides elements when this class exists */
-  document.body.classList.add('js-ready');
 
   /* ── Storage shim: use localStorage when miniappsAI.storage is unavailable ── */
   if (!window.miniappsAI) {
@@ -63,6 +61,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const tabPanels = document.querySelectorAll('.tab-panel');
   const navToggle = document.getElementById('navToggle');
   const navLinksContainer = document.getElementById('navLinks');
+
+  /* No-op: fade-in is CSS-only now, elements are always visible */
+  function observeFadeIns() {}
 
   /* ── Stores ── */
   const logStore = {
@@ -155,32 +156,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── Mobile Menu ── */
   navToggle.addEventListener('click', () => { navToggle.classList.toggle('open'); navLinksContainer.classList.toggle('open'); });
-
-  /* ── Scroll Fade-in ── */
-  let fadeObserver = null;
-
-  function observeFadeIns(container) {
-    if (!container || !fadeObserver) return;
-    container.querySelectorAll('.fade-in').forEach(el => {
-      if (!el.classList.contains('visible')) fadeObserver.observe(el);
-    });
-  }
-
-  /* Initialize IntersectionObserver safely — runs even if late async calls fail */
-  try {
-    fadeObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          fadeObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    observeFadeIns(document.querySelector('.tab-panel.active'));
-  } catch (e) {
-    console.warn('[fade] observer failed, forcing visibility', e);
-    document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
-  }
 
   /* ── Pricing Expand ── */
   document.querySelectorAll('.pricing-clickable').forEach(card => {
