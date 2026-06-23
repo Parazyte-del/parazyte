@@ -1,3 +1,5 @@
+import { t } from './i18n.js';
+
 const FAQ_KEYS = [
   { q: 'faq.q1', a: 'faq.a1' },
   { q: 'faq.q2', a: 'faq.a2' },
@@ -5,8 +7,6 @@ const FAQ_KEYS = [
   { q: 'faq.q4', a: 'faq.a4' },
   { q: 'faq.q5', a: 'faq.a5' },
 ];
-
-const t = (key) => window.miniappI18n?.t(key) ?? key;
 
 export function initFaq() {
   const list = document.getElementById('faqList');
