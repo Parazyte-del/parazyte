@@ -1,7 +1,6 @@
 // ui/account-panel.js — Account panel UI for clients and admins
 import { getUser, isLoggedIn, isAdmin, register, login, logout, restoreSession, updateProfile, changePassword, getAccountStats } from './account-auth.js';
-
-const t = (k) => window.miniappI18n?.t(k) ?? k;
+import { t } from './i18n.js';
 
 let _panel = null;
 let _isOpen = false;
