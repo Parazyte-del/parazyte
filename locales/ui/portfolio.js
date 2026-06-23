@@ -1,6 +1,5 @@
 import { getPortfolio } from './data-store.js';
-
-const t = (key) => window.miniappI18n?.t(key) ?? key;
+import { t } from './i18n.js';
 
 function renderCard(item) {
   const hasThumb = item.thumb && item.thumb.trim();
