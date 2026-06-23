@@ -1,9 +1,9 @@
+import { t } from './i18n.js';
+
 export function initContact() {
   const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
   if (!form) return;
-
-  const t = (key) => window.miniappI18n?.t(key) ?? key;
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
