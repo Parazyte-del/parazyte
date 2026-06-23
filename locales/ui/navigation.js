@@ -1,59 +1,53 @@
-export function initNavigation() {
-  const nav = document.getElementById('nav');
-  const burger = document.getElementById('navBurger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const allLinks = document.querySelectorAll('.nav-links a, .mobile-menu a');
+// ui/i18n.js — Self-contained i18n for external hosting compatibility
+// Uses platform miniappI18n when available, falls back to locales/*.json
 
-  const handleScroll = () => {
-    nav?.classList.toggle('scrolled', window.scrollY > 50);
-  };
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
+let _catalog = null;
+let _ready = false;
 
-  burger?.addEventListener('click', () => {
-    const isOpen = burger.classList.toggle('open');
-    mobileMenu?.classList.toggle('open', isOpen);
-    mobileMenu?.setAttribute('aria-hidden', String(!isOpen));
-    burger.setAttribute('aria-expanded', String(isOpen));
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+export async function initI18n() {
+  if (window.miniappI18n) {
+    _ready = true;
+    return;
+  }
+  try {
+    const resp = await fetch('locales/fr.json');
+    if (resp.ok) _catalog = await resp.json();
+  } catch {}
+  _ready = true;
+  applyToDOM();
+}
+
+function getVal(key) {
+  if (!_catalog) return null;
+  const parts = key.split('.');
+  let cur = _catalog;
+  for (const p of parts) {
+    if (cur && typeof cur === 'object' && p in cur) cur = cur[p];
+    else return null;
+  }
+  return typeof cur === 'string' ? cur : null;
+}
+
+export function t(key, values) {
+  if (window.miniappI18n) return window.miniappI18n.t(key, values);
+  let str = getVal(key) ?? key;
+  if (values) {
+    for (const [k, v] of Object.entries(values)) {
+      str = str.split(`{${k}}`).join(String(v));
+    }
+  }
+  return str;
+}
+
+export function applyToDOM(root) {
+  if (window.miniappI18n) return;
+  const el = root || document;
+  el.querySelectorAll('[data-i18n]').forEach(n => {
+    n.textContent = t(n.getAttribute('data-i18n'));
   });
-
-  allLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      if (href?.startsWith('#')) {
-        e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-          const offset = 72;
-          const top = target.getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top, behavior: 'smooth' });
-        }
-        burger?.classList.remove('open');
-        mobileMenu?.classList.remove('open');
-        mobileMenu?.setAttribute('aria-hidden', 'true');
-        burger?.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
+  ['placeholder', 'title', 'alt', 'aria-label'].forEach(attr => {
+    el.querySelectorAll(`[data-i18n-${attr}]`).forEach(n => {
+      n.setAttribute(attr, t(n.getAttribute(`data-i18n-${attr}`)));
     });
   });
-
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a');
-
-  const updateActive = () => {
-    const y = window.scrollY + 140;
-    let current = '';
-    sections.forEach(sec => {
-      const top = sec.offsetTop;
-      if (y >= top) current = sec.getAttribute('id');
-    });
-    navLinks.forEach(link => {
-      const href = link.getAttribute('href')?.replace('#', '');
-      link.classList.toggle('active', href === current);
-    });
-  };
-
-  window.addEventListener('scroll', updateActive, { passive: true });
-  updateActive();
 }
