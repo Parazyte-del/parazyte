@@ -4,8 +4,8 @@ import { renderAdminPortfolio } from './admin-portfolio.js';
 import { renderAdminPricing } from './admin-pricing.js';
 import { renderAdminTestimonials } from './admin-testimonials.js';
 import { getStats } from './data-store.js';
+import { t } from './i18n.js';
 
-const t = (k) => window.miniappI18n?.t(k) ?? k;
 let activeTab = 'portfolio';
 let _container = null;
 
