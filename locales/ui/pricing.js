@@ -1,12 +1,11 @@
 import { getPricing } from './data-store.js';
+import { t } from './i18n.js';
 
 export async function initPricing() {
   const tiktokCard = document.getElementById('tiktokCard');
   const tiktokExpanded = document.getElementById('tiktokExpanded');
   const viewBtn = document.getElementById('tiktokViewBtn');
   if (!tiktokCard || !tiktokExpanded) return;
-
-  const t = (key) => window.miniappI18n?.t(key) ?? key;
 
   // Load admin-configured pricing
   try {
