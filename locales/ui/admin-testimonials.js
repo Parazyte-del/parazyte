@@ -1,7 +1,6 @@
 // ui/admin-testimonials.js — Testimonials CRUD for admin panel
 import { getTestimonials, saveTestimonial, deleteTestimonial } from './data-store.js';
-
-const t = (k) => window.miniappI18n?.t(k) ?? k;
+import { t } from './i18n.js';
 
 export async function renderAdminTestimonials(container, onUpdate) {
   const items = await getTestimonials();
