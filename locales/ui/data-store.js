@@ -1,9 +1,9 @@
 // ui/data-store.js — Centralized data storage for portfolio, testimonials, and pricing
-const STORAGE_KEY = 'parazyte_data';
+// Compatible with miniappsAI.storage and localStorage fallback
+import { getItem, setItem } from './storage.js';
+import { t } from './i18n.js';
 
-function t(key) {
-  return window.miniappI18n?.t(key) ?? key;
-}
+const STORAGE_KEY = 'parazyte_data';
 
 function defaultData() {
   return {
@@ -29,12 +29,11 @@ function defaultData() {
 }
 
 let _data = null;
-const s = () => window.miniappsAI?.storage;
 
 async function load() {
   if (_data) return _data;
   try {
-    const raw = await s()?.getItem(STORAGE_KEY);
+    const raw = await getItem(STORAGE_KEY);
     _data = raw ? JSON.parse(raw) : defaultData();
   } catch {
     _data = defaultData();
@@ -43,7 +42,7 @@ async function load() {
 }
 
 async function persist() {
-  try { await s()?.setItem(STORAGE_KEY, JSON.stringify(_data)); } catch {}
+  try { await setItem(STORAGE_KEY, JSON.stringify(_data)); } catch {}
 }
 
 export async function getPortfolio() {
