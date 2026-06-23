@@ -1,6 +1,5 @@
 import { getTestimonials } from './data-store.js';
-
-const t = (key) => window.miniappI18n?.t(key) ?? key;
+import { t } from './i18n.js';
 
 export async function initTestimonials() {
   const grid = document.getElementById('testimonialsGrid');
