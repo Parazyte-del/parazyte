@@ -1,7 +1,6 @@
 // ui/admin-portfolio.js — Portfolio CRUD for admin panel
 import { getPortfolio, saveVideo, deleteVideo, moveVideo } from './data-store.js';
-
-const t = (k) => window.miniappI18n?.t(k) ?? k;
+import { t } from './i18n.js';
 
 const CATEGORIES = [
   { value: 'tiktok', label: 'TikTok' },
