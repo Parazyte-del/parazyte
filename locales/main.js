@@ -1,3 +1,4 @@
+import { initI18n, applyToDOM } from './ui/i18n.js';
 import { initNavigation } from './ui/navigation.js';
 import { initPortfolio } from './ui/portfolio.js';
 import { initPricing } from './ui/pricing.js';
@@ -9,6 +10,9 @@ import { initAdmin, hideAdmin } from './ui/admin-panel.js';
 import { initAccountPanel, openAccountPanel } from './ui/account-panel.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Bootstrap i18n first — all modules depend on it
+  await initI18n();
+
   initNavigation();
   initPortfolio();
   initPricing();
