@@ -1,7 +1,6 @@
 // ui/admin-pricing.js — Pricing management for admin panel
 import { getPricing, savePricing } from './data-store.js';
-
-const t = (k) => window.miniappI18n?.t(k) ?? k;
+import { t } from './i18n.js';
 
 export async function renderAdminPricing(container) {
   const pricing = await getPricing();
