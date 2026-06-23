@@ -3,466 +3,397 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parazyte — Monteur Vidéo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>Parazyte — Monteur Vidéo Professionnel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-  <nav class="top-nav" id="topNav">
+
+  <!-- NOISE OVERLAY -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- NAVIGATION -->
+  <nav id="nav" class="nav">
     <div class="nav-inner">
-      <a href="#" class="nav-logo" data-i18n="app.brand">Parazyte</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <a href="#home" class="nav-logo" aria-label="Parazyte — Accueil">
+        <span class="nav-logo-text">P</span>arazyte
+      </a>
+      <div class="nav-links">
+        <a href="#home" class="active" data-i18n="nav.home">Accueil</a>
+        <a href="#portfolio" data-i18n="nav.portfolio">Portfolio</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="#pricing" data-i18n="nav.pricing">Tarifs</a>
+        <a href="#contact" class="nav-cta-link" data-i18n="nav.contact">Contact</a>
+      </div>
+      <button id="navAccountBtn" class="nav-account-btn" aria-label="Mon compte">
+        <svg class="nav-account-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="account-avatar"></span>
+      </button>
+      <button id="navBurger" class="nav-burger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <div class="nav-links" id="navLinks">
-        <a href="#" class="nav-link active" data-tab="accueil" data-i18n="nav.home">Accueil</a>
-        <a href="#" class="nav-link" data-tab="tarifs" data-i18n="nav.pricing">Tarifs</a>
-        <a href="#" class="nav-link" data-tab="portfolio" data-i18n="nav.portfolio">Portfolio</a>
-        <a href="#" class="nav-link" data-tab="contact" data-i18n="nav.contact">Contact</a>
-        <a href="#" class="nav-link" data-tab="faq" data-i18n="nav.faq">FAQ</a>
-        <a href="#" class="nav-link" data-tab="commandes" data-i18n="nav.orders">Commandes</a>
-        <a href="#" class="nav-link" data-tab="compte" data-i18n="nav.account">Compte</a>
-        <a href="#" class="nav-link hidden" data-tab="logs" id="navLogs" data-i18n="nav.logs">Logs</a>
-      </div>
     </div>
   </nav>
 
-  <main class="main-content">
+  <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+    <a href="#home" data-i18n="nav.home">Accueil</a>
+    <a href="#portfolio" data-i18n="nav.portfolio">Portfolio</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    <a href="#pricing" data-i18n="nav.pricing">Tarifs</a>
+    <a href="#contact" data-i18n="nav.contact">Contact</a>
+    <button id="navAccountBtnMobile" class="mobile-menu-account" aria-label="Mon compte">
+      <svg class="nav-account-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="account-avatar"></span>
+      <span data-i18n="nav.account">Mon compte</span>
+    </button>
+  </div>
 
-    <!-- ACCUEIL -->
-    <section class="tab-panel active" id="panel-accueil">
-      <header class="hero">
-        <span class="hero-eyebrow" data-i18n="app.eyebrow">Monteur Vidéo &amp; Réalisateur</span>
-        <h1 class="hero-title" data-i18n="app.title">Parazyte</h1>
-        <p class="hero-subtitle" data-i18n="app.subtitle">Monteur vidéo créatif &amp; réalisateur de clips Rockstar Editor. TikTok, YouTube, FiveM — je donne vie à tes idées.</p>
-        <div class="hero-actions">
-          <button class="btn btn-primary" data-tab-nav="tarifs" data-i18n="app.cta_pricing">Voir les Tarifs</button>
-          <button class="btn btn-outline" data-tab-nav="contact" data-i18n="app.cta_contact">Me Contacter</button>
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-bg-orbs" aria-hidden="true">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-eyebrow reveal">
+          <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+          <span data-i18n="hero.eyebrow">Monteur Vidéo Freelance</span>
+        </span>
+        <h1 class="hero-title reveal reveal-delay-1">
+          <span class="hero-title-name">Parazyte</span>
+          <span class="hero-title-role" data-i18n="hero.title_role">— Monteur Vidéo Professionnel</span>
+        </h1>
+        <p class="hero-subtitle reveal reveal-delay-2" data-i18n="hero.subtitle">
+          Je transforme vos vidéos en contenus percutants pour TikTok, YouTube et les réseaux sociaux.
+        </p>
+        <div class="hero-actions reveal reveal-delay-3">
+          <a href="#portfolio" class="hero-cta hero-cta-primary">
+            <span data-i18n="hero.cta">Voir mon portfolio</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="#contact" class="hero-cta hero-cta-secondary">
+            <span data-i18n="hero.cta_contact">Me contacter</span>
+          </a>
         </div>
-      </header>
 
-      <div class="section">
-        <h2 class="section-title" data-i18n="app.section1_title">Ce que je fais</h2>
-        <p class="section-text" data-i18n="app.section1_text">Montage vidéo professionnel pour tous formats : clips TikTok, vidéos YouTube, trailers FiveM et clips Rockstar Editor.</p>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section">
-        <h2 class="section-title" data-i18n="app.section2_title">Mes Services</h2>
-        <div class="services-grid">
-          <article class="card">
-            <div class="card-icon">🎬</div>
-            <h3 class="card-title" data-i18n="app.section2_item1">Montage TikTok / Shorts</h3>
-            <p class="card-desc" data-i18n="app.section2_item1_desc">Clips verticaux, tendances, transitions dynamiques.</p>
-          </article>
-          <article class="card">
-            <div class="card-icon">▶️</div>
-            <h3 class="card-title" data-i18n="app.section2_item2">Montage YouTube</h3>
-            <p class="card-desc" data-i18n="app.section2_item2_desc">Intros, outros, effets pro — contenu long format.</p>
-          </article>
-          <article class="card">
-            <div class="card-icon">🎮</div>
-            <h3 class="card-title" data-i18n="app.section2_item3">Trailers FiveM</h3>
-            <p class="card-desc" data-i18n="app.section2_item3_desc">Cinématiques RP, trailers serveur, ambiance immersive.</p>
-          </article>
-          <article class="card">
-            <div class="card-icon">⭐</div>
-            <h3 class="card-title" data-i18n="app.section2_item4">Clips Rockstar Editor</h3>
-            <p class="card-desc" data-i18n="app.section2_item4_desc">Réalisation &amp; montage de clips GTA avec Rockstar Editor.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- TARIFS -->
-    <section class="tab-panel" id="panel-tarifs">
-      <div class="section">
-        <h2 class="section-title" data-i18n="pricing.title">Mes Tarifs</h2>
-        <p class="section-text" data-i18n="pricing.subtitle">Clique sur un format pour voir les offres détaillées.</p>
-        <div class="pricing-grid">
-          <article class="pricing-card pricing-clickable" data-pricing="tiktok">
-            <div class="pricing-card-front">
-              <span class="pricing-badge" data-i18n="pricing.badge_tiktok">TikTok / Shorts</span>
-              <div class="pricing-card-icon">🎬</div>
-              <h3 class="pricing-card-title" data-i18n="pricing.tiktok_title">Format TikTok</h3>
-              <p class="pricing-card-desc" data-i18n="pricing.tiktok_desc">Montage vertical, tendances, transitions rapides.</p>
-              <span class="pricing-card-from" data-i18n="pricing.from">À partir de</span>
-              <div class="pricing-price">10€</div>
-              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
-            </div>
-            <div class="pricing-card-details">
-              <div class="pricing-tier">
-                <span class="pricing-tier-name" data-i18n="pricing.standard">Standard</span>
-                <span class="pricing-tier-price">10€</span>
-                <span class="pricing-tier-info" data-i18n="pricing.tiktok_std">Montage vidéo • Livraison 72h</span>
-              </div>
-              <div class="pricing-tier">
-                <span class="pricing-tier-name" data-i18n="pricing.pro">Pro</span>
-                <span class="pricing-tier-price">15€</span>
-                <span class="pricing-tier-info" data-i18n="pricing.tiktok_pro">Transitions &amp; effets • Livraison 48h • 1 retouche</span>
-              </div>
-              <div class="pricing-tier">
-                <span class="pricing-tier-name" data-i18n="pricing.premium">Premium</span>
-                <span class="pricing-tier-price">20€</span>
-                <span class="pricing-tier-info" data-i18n="pricing.tiktok_prem">Montage complet • Livraison 24h • Retouches illimitées</span>
-              </div>
-              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta">Commander</button>
-            </div>
-          </article>
-
-          <article class="pricing-card pricing-clickable pricing-featured" data-pricing="youtube">
-            <div class="pricing-card-front">
-              <span class="pricing-badge" data-i18n="pricing.badge_youtube">YouTube</span>
-              <div class="pricing-card-icon">▶️</div>
-              <h3 class="pricing-card-title" data-i18n="pricing.youtube_title">Format YouTube</h3>
-              <p class="pricing-card-desc" data-i18n="pricing.youtube_desc">Montage horizontal, intro, outro, effets pro.</p>
-              <div class="pricing-price pricing-price-deviz" data-i18n="pricing.yt_deviz">Sur devis</div>
-              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour plus d'infos ↓</span>
-            </div>
-            <div class="pricing-card-details">
-              <div class="pricing-note" data-i18n="pricing.yt_deviz_note">Chaque projet YouTube est unique. Contacte-moi pour un devis personnalisé.</div>
-              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta_deviz">Demander un devis</button>
-            </div>
-          </article>
-
-          <article class="pricing-card pricing-clickable" data-pricing="fivem">
-            <div class="pricing-card-front">
-              <span class="pricing-badge" data-i18n="pricing.badge_fivem">FiveM</span>
-              <div class="pricing-card-icon">🎮</div>
-              <h3 class="pricing-card-title" data-i18n="pricing.fivem_title">Trailer FiveM</h3>
-              <p class="pricing-card-desc" data-i18n="pricing.fivem_desc">Cinématiques, ambiance RP, trailer serveur.</p>
-              <span class="pricing-card-from" data-i18n="pricing.fivem_from">Tarif</span>
-              <div class="pricing-price">55€ <small data-i18n="pricing.fivem_per_min">/ minute</small></div>
-              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
-            </div>
-            <div class="pricing-card-details">
-              <div class="pricing-tier pricing-tier-highlight">
-                <span class="pricing-tier-name" data-i18n="pricing.fivem_rate_label">Tarif</span>
-                <span class="pricing-tier-price">55€ <small data-i18n="pricing.fivem_per_min">/ minute</small></span>
-                <span class="pricing-tier-info" data-i18n="pricing.fivem_rate_desc">Cinématiques, ambiance RP, trailer serveur</span>
-              </div>
-              <div class="pricing-note" data-i18n="pricing.fivem_note">Prix calculé sur la durée finale de la vidéo.</div>
-              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta">Commander</button>
-            </div>
-          </article>
-
-          <article class="pricing-card pricing-clickable" data-pricing="rockstar">
-            <div class="pricing-card-front">
-              <span class="pricing-badge" data-i18n="pricing.badge_rockstar">Rockstar Editor</span>
-              <div class="pricing-card-icon">⭐</div>
-              <h3 class="pricing-card-title" data-i18n="pricing.rockstar_title">Clip Rockstar Editor</h3>
-              <p class="pricing-card-desc" data-i18n="pricing.rockstar_desc">Réalisation &amp; montage de clips GTA via Rockstar Editor.</p>
-              <span class="pricing-card-from" data-i18n="pricing.from">À partir de</span>
-              <div class="pricing-price">3€ <small data-i18n="pricing.rockstar_per_clip">/ clip</small></div>
-              <span class="pricing-card-hint" data-i18n="pricing.click_hint">Cliquez pour voir les offres ↓</span>
-            </div>
-            <div class="pricing-card-details">
-              <div class="pricing-tier pricing-tier-highlight">
-                <span class="pricing-tier-name" data-i18n="pricing.rockstar_rate_label">Tarif</span>
-                <span class="pricing-tier-price">3€ <small data-i18n="pricing.rockstar_per_clip">/ clip</small></span>
-                <span class="pricing-tier-info" data-i18n="pricing.rockstar_rate_desc">Réalisation, montage &amp; effets via Rockstar Editor</span>
-              </div>
-              <div class="pricing-note" data-i18n="pricing.rockstar_note">Prix par clip produit. Réductions possibles pour les commandes en série.</div>
-              <button class="btn btn-primary btn-full" data-tab-nav="contact" data-i18n="pricing.cta">Commander</button>
-            </div>
-          </article>
+        <div class="stats-bar reveal reveal-delay-4">
+          <div class="stat-item">
+            <div class="stat-number" data-count="150" data-suffix="+">0</div>
+            <div class="stat-label" data-i18n="hero.stats_projects">Projets réalisés</div>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="50" data-suffix="+">0</div>
+            <div class="stat-label" data-i18n="hero.stats_clients">Clients satisfaits</div>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="10" data-suffix="M+">0</div>
+            <div class="stat-label" data-i18n="hero.stats_views">Vues générées</div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- PORTFOLIO -->
-    <section class="tab-panel" id="panel-portfolio">
-      <div class="section">
-        <h2 class="section-title" data-i18n="portfolio.title">Portfolio</h2>
-        <p class="section-text" data-i18n="portfolio.subtitle">Une sélection de mes réalisations vidéo.</p>
-
-        <div class="admin-controls hidden" id="adminControls">
-          <div class="admin-badge-bar"><span class="admin-badge-icon">👑</span><span class="admin-badge-text" data-i18n="admin.badge">Admin</span></div>
-          <button class="btn btn-primary btn-sm" id="addVideoBtn" data-i18n="admin.add_video">+ Ajouter une vidéo</button>
+  <!-- SKILLS -->
+  <section id="skills" class="skills-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge" data-i18n="skills.badge">Services</span>
+        <h2 data-i18n="skills.title">Mes Compétences</h2>
+        <p data-i18n="skills.subtitle">Des compétences clés pour des vidéos qui captivent</p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card reveal reveal-delay-1">
+          <div class="skill-icon-wrap"><div class="skill-icon">🎬</div></div>
+          <h3 data-i18n="skills.montage">Montage Vidéo</h3>
+          <p data-i18n="skills.montage_desc">Montage professionnel avec transitions fluides et rythme parfait.</p>
         </div>
+        <div class="skill-card reveal reveal-delay-2">
+          <div class="skill-icon-wrap"><div class="skill-icon">✨</div></div>
+          <h3 data-i18n="skills.effects">Effets Visuels</h3>
+          <p data-i18n="skills.effects_desc">Effets spéciaux, animations et motion design pour captiver votre audience.</p>
+        </div>
+        <div class="skill-card reveal reveal-delay-3">
+          <div class="skill-icon-wrap"><div class="skill-icon">💬</div></div>
+          <h3 data-i18n="skills.subtitles">Sous-titres Dynamiques</h3>
+          <p data-i18n="skills.subtitles_desc">Sous-titres animés et stylisés pour maximiser l'engagement.</p>
+        </div>
+        <div class="skill-card reveal reveal-delay-4">
+          <div class="skill-icon-wrap"><div class="skill-icon">📱</div></div>
+          <h3 data-i18n="skills.social">Optimisation Réseaux</h3>
+          <p data-i18n="skills.social_desc">Formats adaptés TikTok, YouTube Shorts, Instagram Reels et plus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="admin-sync-panel hidden" id="adminSyncPanel">
-          <span class="admin-sync-label">🔗 Sync vidéo</span>
-          <span class="admin-sync-code" id="syncCodeDisplay">Chargement...</span>
-          <button class="btn btn-outline btn-sm" id="syncCopyBtn">📋 Copier le code</button>
-          <div class="admin-sync-input-row">
-            <input type="text" class="form-input admin-sync-input" id="syncCodeInput" placeholder="Coller un code de sync...">
-            <button class="btn btn-primary btn-sm" id="syncApplyBtn">🔗 Appliquer</button>
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge" data-i18n="portfolio.badge">Portfolio</span>
+        <h2 data-i18n="portfolio.title">Mon Portfolio</h2>
+        <p data-i18n="portfolio.subtitle">Découvrez mes réalisations les plus récentes</p>
+      </div>
+      <div class="portfolio-filters reveal">
+        <button class="filter-btn active" data-filter="all" data-i18n="portfolio.all">Tous</button>
+        <button class="filter-btn" data-filter="tiktok" data-i18n="portfolio.tiktok">TikTok</button>
+        <button class="filter-btn" data-filter="youtube" data-i18n="portfolio.youtube">YouTube</button>
+        <button class="filter-btn" data-filter="shorts" data-i18n="portfolio.shorts">Shorts / Reels</button>
+      </div>
+      <div id="portfolioGrid" class="portfolio-grid"></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge" data-i18n="testimonials.badge">Témoignages</span>
+        <h2 data-i18n="testimonials.title">Avis Clients</h2>
+        <p data-i18n="testimonials.subtitle">Ce que disent mes clients</p>
+      </div>
+      <div id="testimonialsGrid" class="testimonials-grid reveal"></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge" data-i18n="pricing.badge">Tarifs</span>
+        <h2 data-i18n="pricing.title">Tarifs</h2>
+        <p data-i18n="pricing.subtitle">Des offres adaptées à vos besoins</p>
+      </div>
+
+      <div class="pricing-wrapper">
+        <!-- TikTok Section -->
+        <div class="pricing-section reveal">
+          <h3 class="pricing-section-title">
+            <span class="pricing-section-icon" aria-hidden="true">🎵</span>
+            <span data-i18n="pricing.tiktok_title">TikTok</span>
+          </h3>
+          <div class="pricing-cards">
+            <div id="tiktokCard" class="pricing-card pricing-card-clickable">
+              <div class="pricing-card-glow" aria-hidden="true"></div>
+              <h3 data-i18n="pricing.tiktok_card">Montage TikTok</h3>
+              <div class="pricing-price">
+                <span class="pricing-price-amount" id="tiktokPriceDisplay" data-i18n="pricing.tiktok_price">10€</span>
+                <span class="pricing-price-unit">/ vidéo</span>
+              </div>
+              <p class="pricing-price-note" data-i18n="pricing.tiktok_desc">Montage professionnel pour vos vidéos TikTok</p>
+              <button id="tiktokViewBtn" class="pricing-btn pricing-btn-outline" data-i18n="pricing.view_offers">Voir les offres</button>
+
+              <div id="tiktokExpanded" class="pricing-expanded">
+                <div class="pricing-cards-inner">
+                  <!-- Standard -->
+                  <div class="pricing-card-inner">
+                    <div class="pricing-card-inner-header">
+                      <h4 data-i18n="pricing.standard_title">Offre Standard</h4>
+                      <div class="pricing-price-small" id="standardPriceDisplay">10€</div>
+                    </div>
+                    <div class="pricing-features">
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.standard_delivery">Livraison sous 72h maximum</span></div>
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.standard_editing">Montage professionnel</span></div>
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.standard_subtitles">Sous-titres inclus</span></div>
+                    </div>
+                    <a href="#contact" class="pricing-btn pricing-btn-secondary" data-i18n="pricing.standard_cta">Sélectionner</a>
+                  </div>
+                  <!-- Premium -->
+                  <div class="pricing-card-inner pricing-card-inner-featured">
+                    <span class="pricing-badge" data-i18n="pricing.premium_badge">Populaire</span>
+                    <div class="pricing-card-inner-header">
+                      <h4 data-i18n="pricing.premium_title">Offre Premium</h4>
+                      <div class="pricing-price-small" id="premiumPriceDisplay">20€</div>
+                    </div>
+                    <div class="pricing-features">
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.premium_delivery">Livraison sous 24h</span></div>
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.premium_priority">Priorité maximale</span></div>
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.premium_effects">Effets avancés</span></div>
+                      <div class="pricing-feature"><span class="check">✓</span> <span data-i18n="pricing.premium_subtitles">Sous-titres animés premium</span></div>
+                    </div>
+                    <a href="#contact" class="pricing-btn pricing-btn-primary" data-i18n="pricing.premium_cta">Sélectionner</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="admin-add-form hidden" id="addVideoForm">
-          <h3 class="admin-form-title" data-i18n="admin.add_title">Ajouter une vidéo</h3>
+        <!-- YouTube Section -->
+        <div class="pricing-section reveal">
+          <h3 class="pricing-section-title">
+            <span class="pricing-section-icon" aria-hidden="true">📺</span>
+            <span data-i18n="pricing.youtube_title">YouTube</span>
+          </h3>
+          <div class="pricing-cards">
+            <div class="pricing-card youtube-pricing">
+              <div class="pricing-card-glow" aria-hidden="true"></div>
+              <div class="pricing-price">
+                <span class="pricing-price-amount" data-i18n="pricing.youtube_price">Sur devis</span>
+              </div>
+              <p class="pricing-price-note" id="youtubeDescDisplay" data-i18n="pricing.youtube_desc">Le prix dépend de la durée, du niveau de montage et des demandes spécifiques.</p>
+              <a href="#contact" class="pricing-btn pricing-btn-primary" data-i18n="pricing.youtube_cta">Me contacter</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge" data-i18n="faq.badge">FAQ</span>
+        <h2 data-i18n="faq.title">Questions Fréquentes</h2>
+        <p data-i18n="faq.subtitle">Tout ce que vous devez savoir</p>
+      </div>
+      <div id="faqList" class="faq-list reveal"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-badge" data-i18n="contact.badge">Contact</span>
+        <h2 data-i18n="contact.title">Contact</h2>
+        <p data-i18n="contact.subtitle">Prêt à donner vie à votre projet ?</p>
+      </div>
+
+      <div class="contact-wrapper reveal">
+        <form id="contactForm" class="contact-form" novalidate>
           <div class="form-row">
             <div class="form-group">
-              <label for="video-type" data-i18n="admin.video_type">Type</label>
-              <select id="video-type" class="form-input"><option value="tiktok">TikTok / Shorts</option><option value="youtube">YouTube</option></select>
+              <label for="contactName" data-i18n="contact.name_label">Votre nom</label>
+              <input type="text" id="contactName" class="form-input" data-i18n-placeholder="contact.name_placeholder" placeholder="Entrez votre nom" required>
             </div>
             <div class="form-group">
-              <label for="video-title" data-i18n="admin.video_title_label">Titre</label>
-              <input type="text" id="video-title" class="form-input" placeholder="Montage @pseudo" required>
+              <label for="contactEmail" data-i18n="contact.email_label">Votre email</label>
+              <input type="email" id="contactEmail" class="form-input" data-i18n-placeholder="contact.email_placeholder" placeholder="Entrez votre email" required>
             </div>
           </div>
           <div class="form-group">
-            <label for="video-url" data-i18n="admin.video_url">Lien de la vidéo</label>
-            <input type="url" id="video-url" class="form-input" placeholder="https://www.tiktok.com/..." required>
-          </div>
-          <div class="form-group">
-            <label for="video-cat" data-i18n="admin.video_cat_label">Catégorie affichée</label>
-            <input type="text" id="video-cat" class="form-input" placeholder="TikTok / Shorts">
-          </div>
-          <div class="admin-form-actions">
-            <button class="btn btn-primary" id="confirmAddVideo" data-i18n="admin.confirm_add">Ajouter</button>
-            <button class="btn btn-outline" id="cancelAddVideo" data-i18n="admin.cancel">Annuler</button>
-          </div>
-        </div>
-
-        <div class="hidden" id="customVideosSection">
-          <h3 class="portfolio-section-label" data-i18n="admin.custom_section">🎬 Vidéos ajoutées</h3>
-          <div class="portfolio-grid" id="customVideosGrid"></div>
-        </div>
-
-        <!-- TikTok / Shorts -->
-        <h3 class="portfolio-section-label">🎬 TikTok / Shorts</h3>
-        <div class="portfolio-grid">
-          <a href="https://www.tiktok.com/@tbn_fa/video/7636492367951924502" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @tbn_fa</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@storm.life.fa/video/7640229913152343318" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @storm.life.fa</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@storm.life.fa/video/7637577172995132694" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Clip @storm.life.fa</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@hokocommunity/video/7637886870549990678" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @hokocommunity</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@hervanarp/video/7640427593006583073" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @hervanarp</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@hervanarp/video/7640923170291338529" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Clip @hervanarp</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7633103044967664918" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @ramiamiaww_clips</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7630882677863845142" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Clip @ramiamiaww_clips</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7630508702310698262" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @ramiamiaww_clips</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@ramiamiaww_clips/video/7629392823103671574" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Clip @ramiamiaww_clips</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-        </div>
-
-        <!-- @eastborn.fa1 -->
-        <h3 class="portfolio-section-label" style="margin-top:3rem">🎬 @eastborn.fa1</h3>
-        <div class="portfolio-grid">
-          <a href="https://www.tiktok.com/@eastborn.fa1/video/7639762865750117664" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @eastborn.fa1</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@eastborn.fa1/video/7642013973478444321" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @eastborn.fa1</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@asgardfa/video/7631486256601484566" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @asgardfa</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-          <a href="https://www.tiktok.com/@.wawak0/video/7647932130856602902" target="_blank" rel="noopener" class="portfolio-item" data-type="tiktok">
-            <div class="portfolio-img" data-label="TikTok"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage @.wawak0</h3><p class="portfolio-cat">TikTok / Shorts</p>
-          </a>
-        </div>
-
-        <!-- YouTube -->
-        <h3 class="portfolio-section-label" style="margin-top:3rem">▶️ YouTube</h3>
-        <div class="portfolio-grid portfolio-grid-wide">
-          <a href="https://www.youtube.com/watch?v=xQv5bDGwK9M" target="_blank" rel="noopener" class="portfolio-item portfolio-item-wide" data-type="youtube">
-            <div class="portfolio-img portfolio-img-wide" data-label="YouTube"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage YouTube</h3><p class="portfolio-cat">YouTube — Format long</p>
-          </a>
-          <a href="https://youtu.be/bstB0qNTghc" target="_blank" rel="noopener" class="portfolio-item portfolio-item-wide" data-type="youtube">
-            <div class="portfolio-img portfolio-img-wide" data-label="YouTube"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage YouTube</h3><p class="portfolio-cat">YouTube</p>
-          </a>
-          <a href="https://youtu.be/aakKtVJKPtE" target="_blank" rel="noopener" class="portfolio-item portfolio-item-wide" data-type="youtube">
-            <div class="portfolio-img portfolio-img-wide" data-label="YouTube"><div class="portfolio-play">▶</div></div>
-            <h3 class="portfolio-name">Montage YouTube</h3><p class="portfolio-cat">YouTube</p>
-          </a>
-        </div>
-      </div>
-
-      <div class="lightbox hidden" id="videoLightbox">
-        <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
-        <div class="lightbox-content">
-          <button class="lightbox-close" id="lightboxClose" aria-label="Fermer">✕</button>
-          <div class="lightbox-video" id="lightboxVideo"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="tab-panel" id="panel-contact">
-      <div class="section">
-        <h2 class="section-title" data-i18n="contact.title">Contact</h2>
-        <p class="section-text" data-i18n="contact.subtitle">Dis-moi ce dont tu as besoin, je te réponds vite.</p>
-        <form class="contact-form" id="contactForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-name" data-i18n="contact.name">Nom</label>
-              <input type="text" id="contact-name" class="form-input" data-i18n-placeholder="contact.name_ph" placeholder="Ton nom" required>
-            </div>
-            <div class="form-group">
-              <label for="contact-email" data-i18n="contact.email_discord">Email ou Discord</label>
-              <input type="text" id="contact-email" class="form-input" data-i18n-placeholder="contact.email_discord_ph" placeholder="ton@email.com ou pseudo Discord" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="contact-service" data-i18n="contact.service">Service souhaité</label>
-            <select id="contact-service" class="form-input">
-              <option value="" data-i18n="contact.service_default">Choisir un service</option>
-              <option value="collaboration" data-i18n="contact.service_collab">Collaboration</option>
-              <option value="autre" data-i18n="contact.service_autre">Autre</option>
-              <option value="demande_speciale" data-i18n="contact.service_special">Demande Spéciale</option>
+            <label for="contactProject" data-i18n="contact.project_label">Type de projet</label>
+            <select id="contactProject" class="form-select" required>
+              <option value="" disabled selected data-i18n="contact.project_placeholder">Sélectionnez un type</option>
+              <option value="tiktok" data-i18n="contact.project_tiktok">Montage TikTok</option>
+              <option value="youtube" data-i18n="contact.project_youtube">Montage YouTube</option>
+              <option value="shorts" data-i18n="contact.project_shorts">Shorts / Reels</option>
+              <option value="other" data-i18n="contact.project_other">Autre</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="contact-msg" data-i18n="contact.message">Message</label>
-            <textarea id="contact-msg" class="form-input" rows="5" data-i18n-placeholder="contact.message_ph" placeholder="Décris ton projet..." required></textarea>
+            <label for="contactMessage" data-i18n="contact.message_label">Votre message</label>
+            <textarea id="contactMessage" class="form-textarea" rows="5" data-i18n-placeholder="contact.message_placeholder" placeholder="Décrivez votre projet..." required></textarea>
           </div>
-          <button type="submit" id="contactSubmit" class="btn btn-primary btn-full" data-i18n="contact.send">Envoyer</button>
-          <div class="form-loading hidden" id="formLoading"><div class="spinner"></div><span data-i18n="contact.sending">Envoi en cours...</span></div>
-          <div class="form-success hidden" id="formSuccess"><span data-i18n="contact.success">Merci ! Ton message a bien été envoyé.</span></div>
-          <div class="form-error hidden" id="formError"><span data-i18n="contact.error">Oups, une erreur est survenue. Réessaie.</span></div>
+          <button type="submit" class="form-submit">
+            <span data-i18n="contact.send">Envoyer</span>
+            <svg class="form-submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+          <div id="formSuccess" class="form-success">
+            <span class="form-success-icon" aria-hidden="true">✓</span>
+            <span data-i18n="contact.success">Message envoyé avec succès ! Je vous répondrai rapidement.</span>
+          </div>
         </form>
-      </div>
-    </section>
 
-    <!-- FAQ -->
-    <section class="tab-panel" id="panel-faq">
-      <div class="section">
-        <h2 class="section-title" data-i18n="faq.title">Questions Fréquentes</h2>
-        <p class="section-text" data-i18n="faq.subtitle">Tout ce que tu dois savoir.</p>
-        <div class="faq-list">
-          <details class="faq-item"><summary data-i18n="faq.q1">Combien de temps pour un montage ?</summary><p data-i18n="faq.a1">TikTok &amp; Shorts : 24h à 72h. YouTube : 48h à 72h. FiveM : selon la durée. Rockstar Editor : sous 48h en général.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q2">Est-ce que tu fais des retouches ?</summary><p data-i18n="faq.a2">Oui ! Chaque formule inclut des retouches. La formule Pro offre 1 retouche, la formule Premium des retouches illimitées.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q3">Comment on travaille ensemble ?</summary><p data-i18n="faq.a3">Tu m'envoies tes rushes/footage, je m'occupe du reste. On échange par Discord ou email.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q4">Quels formats de livraison ?</summary><p data-i18n="faq.a4">MP4 en haute qualité (1080p ou 4K selon le projet). Format vertical ou horizontal selon le besoin.</p></details>
-          <details class="faq-item"><summary data-i18n="faq.q5">Comment se passe le paiement ?</summary><p data-i18n="faq.a5">Paiement à la livraison ou 50% à la commande pour les gros projets. Paiement par PayPal, virement ou carte.</p></details>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMMANDES -->
-    <section class="tab-panel" id="panel-commandes">
-      <div class="section">
-        <div class="orders-page-header">
-          <div><h2 class="section-title" data-i18n="orders.title">Commandes</h2><p class="section-text" data-i18n="orders.subtitle">Suivi de tes projets vidéo en temps réel.</p></div>
-          <button class="btn btn-primary" id="newOrderBtn" data-i18n="orders.new_order">+ Nouvelle commande</button>
-        </div>
-        <div class="orders-login-prompt hidden" id="ordersLoginPrompt"><span class="orders-empty-icon">🔐</span><p data-i18n="orders.login_prompt">Connecte-toi pour gérer tes commandes.</p><button class="btn btn-primary" data-tab-nav="compte" data-i18n="account.login">Connexion</button></div>
-        <div class="order-form-card hidden" id="newOrderForm">
-          <h3 class="order-form-title" data-i18n="orders.form_title">Nouvelle commande</h3>
-          <div class="form-group"><label for="order-discord"><span data-i18n="orders.discord_label">Pseudo Discord</span> <span class="required-star">*</span></label><input type="text" id="order-discord" class="form-input" data-i18n-placeholder="orders.discord_ph" placeholder="ex: parazyte#0001" required></div>
-          <div class="form-row">
-            <div class="form-group"><label for="order-service" data-i18n="orders.service">Service</label><select id="order-service" class="form-input"><option value="tiktok">TikTok / Shorts</option><option value="youtube">YouTube</option><option value="fivem">FiveM</option><option value="rockstar">Rockstar Editor</option></select></div>
-            <div class="form-group" id="orderTierGroup"><label for="order-tier" data-i18n="orders.form_tier">Formule</label><select id="order-tier" class="form-input"><option value="standard">Standard</option><option value="pro">Pro</option><option value="premium">Premium</option></select></div>
-          </div>
-          <div class="form-group"><label for="order-desc" data-i18n="orders.form_desc">Description du projet</label><textarea id="order-desc" class="form-input" rows="4" data-i18n-placeholder="orders.form_desc_ph" placeholder="Décris ton projet..."></textarea></div>
-          <div class="order-form-actions"><button class="btn btn-primary" id="confirmOrder" data-i18n="orders.form_submit">Envoyer la commande</button><button class="btn btn-outline" id="cancelOrder" data-i18n="admin.cancel">Annuler</button></div>
-        </div>
-        <div class="orders-list" id="ordersList"></div>
-        <div class="orders-empty" id="ordersEmpty"><span class="orders-empty-icon">📦</span><p data-i18n="orders.empty">Aucune commande pour le moment.</p></div>
-      </div>
-    </section>
-
-    <!-- COMPTE -->
-    <section class="tab-panel" id="panel-compte">
-      <div class="section auth-section">
-        <div id="authGuest">
-          <h2 class="section-title" data-i18n="account.title">Mon Compte</h2>
-          <p class="section-text" data-i18n="account.subtitle">Connecte-toi ou crée un compte pour suivre tes commandes.</p>
-          <div class="auth-tabs"><button class="auth-tab active" data-auth="login" data-i18n="account.login">Connexion</button><button class="auth-tab" data-auth="register" data-i18n="account.register">Inscription</button></div>
-          <form class="auth-form" id="loginForm">
-            <div class="form-group"><label for="login-email" data-i18n="contact.email">Email</label><input type="email" id="login-email" class="form-input" data-i18n-placeholder="contact.email_ph" placeholder="ton@email.com" required></div>
-            <div class="form-group"><label for="login-password" data-i18n="account.password">Mot de passe</label><input type="password" id="login-password" class="form-input" data-i18n-placeholder="account.password_ph" placeholder="Ton mot de passe" required></div>
-            <button type="submit" class="btn btn-primary btn-full" data-i18n="account.login_btn">Se connecter</button>
-            <div class="auth-error hidden" id="loginError"><span data-i18n="account.login_error">Email ou mot de passe incorrect.</span></div>
-          </form>
-          <form class="auth-form hidden" id="registerForm">
-            <div class="form-row"><div class="form-group"><label for="reg-name" data-i18n="contact.name">Nom</label><input type="text" id="reg-name" class="form-input" data-i18n-placeholder="contact.name_ph" placeholder="Ton nom" required></div><div class="form-group"><label for="reg-email" data-i18n="contact.email">Email</label><input type="email" id="reg-email" class="form-input" data-i18n-placeholder="contact.email_ph" placeholder="ton@email.com" required></div></div>
-            <div class="form-group"><label for="reg-password" data-i18n="account.password">Mot de passe</label><input type="password" id="reg-password" class="form-input" data-i18n-placeholder="account.password_ph" placeholder="Choisis un mot de passe" required minlength="6"></div>
-            <div class="form-group"><label for="reg-password2" data-i18n="account.password_confirm">Confirmer le mot de passe</label><input type="password" id="reg-password2" class="form-input" data-i18n-placeholder="account.password_confirm_ph" placeholder="Répète ton mot de passe" required></div>
-            <button type="submit" class="btn btn-primary btn-full" data-i18n="account.register_btn">Créer mon compte</button>
-            <div class="auth-error hidden" id="registerError"><span id="registerErrorText" data-i18n="account.register_error">Une erreur est survenue.</span></div>
-            <div class="auth-success hidden" id="registerSuccess"><span data-i18n="account.register_success">Compte créé ! Tu es maintenant connecté.</span></div>
-          </form>
-        </div>
-        <div id="authUser" class="hidden">
-          <div class="auth-dashboard">
-            <div class="auth-avatar"><span id="avatarLetter">P</span></div>
-            <h2 class="auth-welcome" data-i18n="account.welcome">Bienvenue,</h2>
-            <p class="auth-username" id="authUsername">—</p>
-            <div class="admin-user-badge hidden" id="adminUserBadge"><span>👑</span> <span data-i18n="admin.badge">Administrateur</span></div>
-            <p class="auth-email-display" id="authEmail">—</p>
-            <div class="auth-info-cards">
-              <div class="auth-info-card"><span class="auth-info-label" data-i18n="account.member_since">Membre depuis</span><span class="auth-info-value" id="authSince">—</span></div>
-              <div class="auth-info-card"><span class="auth-info-label" data-i18n="account.orders">Commandes</span><span class="auth-info-value">0</span></div>
+        <div class="contact-links">
+          <h3 data-i18n="contact.or">Ou contactez-moi directement</h3>
+          <a href="#" class="social-link" aria-label="Discord">
+            <div class="social-link-icon discord">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
             </div>
-            <div class="auth-actions"><button class="btn btn-primary btn-full" data-tab-nav="tarifs" data-i18n="account.view_pricing">Voir les Tarifs</button><button class="btn btn-outline btn-full" id="logoutBtn" data-i18n="account.logout">Se déconnecter</button></div>
+            <div>
+              <div class="social-link-text" data-i18n="contact.discord">Discord</div>
+              <div class="social-link-sub">Parazyte#0001</div>
+            </div>
+          </a>
+          <a href="mailto:contact@parazyte.com" class="social-link" aria-label="Email">
+            <div class="social-link-icon email">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div>
+              <div class="social-link-text" data-i18n="contact.email_btn">Email</div>
+              <div class="social-link-sub">contact@parazyte.com</div>
+            </div>
+          </a>
+          <a href="#" class="social-link" aria-label="TikTok">
+            <div class="social-link-icon tiktok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.98a8.21 8.21 0 0 0 4.8 1.56V7.09a4.84 4.84 0 0 1-1.04-.4z"/></svg>
+            </div>
+            <div>
+              <div class="social-link-text" data-i18n="contact.tiktok">TikTok</div>
+              <div class="social-link-sub">@parazyte</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-copy" data-i18n="footer.copyright">© 2024 Parazyte. Tous droits réservés.</p>
+        <div class="footer-right">
+          <a href="#admin" class="footer-admin-link" title="Admin" aria-label="Administration">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </a>
+          <p class="footer-made">
+            <span data-i18n="footer.made_with">Fait avec</span>
+            <span class="footer-heart" aria-hidden="true">♥</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- VIDEO MODAL -->
+  <div id="videoModal" class="video-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="video-modal-content">
+      <div class="video-modal-header">
+        <h3 id="videoModalTitle"></h3>
+        <button id="videoModalClose" class="video-modal-close" aria-label="Fermer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="video-modal-body">
+        <div class="video-modal-placeholder">
+          <div class="video-modal-play" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>
+          <span data-i18n="video_modal.placeholder">Aperçu vidéo — disponibilité prochainement</span>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <!-- LOGS (admin) -->
-    <section class="tab-panel" id="panel-logs">
-      <div class="section">
-        <div class="logs-header">
-          <div><h2 class="section-title" data-i18n="logs.title">Journaux</h2><p class="section-text" data-i18n="logs.subtitle">Tous les événements du site.</p></div>
-          <div class="logs-actions"><button class="btn btn-outline btn-sm" id="clearLogsBtn" data-i18n="logs.clear">🗑️ Tout effacer</button></div>
-        </div>
-        <div class="logs-stats" id="logsStats">
-          <div class="logs-stat"><span class="logs-stat-value" id="statTotal">0</span><span class="logs-stat-label" data-i18n="logs.stat_total">Total</span></div>
-          <div class="logs-stat"><span class="logs-stat-value" id="statVisits">0</span><span class="logs-stat-label" data-i18n="logs.stat_visits">Visites</span></div>
-          <div class="logs-stat"><span class="logs-stat-value" id="statUsers">0</span><span class="logs-stat-label" data-i18n="logs.stat_users">Inscriptions</span></div>
-          <div class="logs-stat"><span class="logs-stat-value" id="statMessages">0</span><span class="logs-stat-label" data-i18n="logs.stat_messages">Messages</span></div>
-          <div class="logs-stat"><span class="logs-stat-value" id="statVideos">0</span><span class="logs-stat-label" data-i18n="logs.stat_videos">Vidéos</span></div>
-          <div class="logs-stat"><span class="logs-stat-value" id="statOrders">0</span><span class="logs-stat-label" data-i18n="logs.stat_orders">Commandes</span></div>
-        </div>
-        <div class="logs-filters">
-          <button class="logs-filter active" data-filter="all" data-i18n="logs.filter_all">Tous</button>
-          <button class="logs-filter" data-filter="visit" data-i18n="logs.filter_visits">📄 Visites</button>
-          <button class="logs-filter" data-filter="auth" data-i18n="logs.filter_auth">👤 Auth</button>
-          <button class="logs-filter" data-filter="video" data-i18n="logs.filter_videos">🎬 Vidéos</button>
-          <button class="logs-filter" data-filter="contact" data-i18n="logs.filter_contact">📩 Contact</button>
-          <button class="logs-filter" data-filter="order" data-i18n="logs.filter_orders">📦 Commandes</button>
-        </div>
-        <div class="logs-list" id="logsList">
-          <div class="logs-empty" id="logsEmpty"><span class="logs-empty-icon">📋</span><p data-i18n="logs.empty">Aucun log pour le moment.</p></div>
-        </div>
+  <!-- ADMIN SECTION (overlay, hidden by default) -->
+  <div id="adminSection" class="admin-section"></div>
+
+  <!-- ACCOUNT PANEL (slide-over panel, hidden by default) -->
+  <div id="accountPanel" class="account-panel" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="account-panel-backdrop"></div>
+    <div class="account-panel-content">
+      <div class="account-panel-topbar">
+        <h3 class="account-panel-title" data-i18n="account.panel_title">Mon Compte</h3>
+        <button id="accountPanelClose" class="account-panel-close" aria-label="Fermer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
       </div>
-    </section>
-  </main>
+      <div class="account-panel-body"></div>
+    </div>
+  </div>
 
-  <footer class="footer"><p data-i18n="app.footer_text">© 2024 Parazyte — Monteur Vidéo &amp; Réalisateur</p></footer>
-
-  <script src="main.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
