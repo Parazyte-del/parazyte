@@ -1,4 +1,7 @@
 // ui/account-auth.js — Unified auth system for clients and admins
+// Uses storage shim for cross-platform compatibility
+import { getItem, setItem, removeItem } from './storage.js';
+
 // Admin emails stored as base64-encoded to avoid plain-text visibility
 const ADMIN_EMAILS_B64 = [
   'eWF4b3V5QGdtYWlsLmNvbQ==',
@@ -13,8 +16,6 @@ const SESSION_DURATION = 7200000; // 2 hours
 let _user = null;
 
 // --- helpers ---
-const s = () => window.miniappsAI?.storage;
-
 function encodePass(p) { return btoa(p); }
 
 function decodeAdminEmails() {
@@ -23,18 +24,18 @@ function decodeAdminEmails() {
 
 async function getAccounts() {
   try {
-    const raw = await s()?.getItem(ACCOUNTS_KEY);
+    const raw = await getItem(ACCOUNTS_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }
 
 async function saveAccounts(accounts) {
-  try { await s()?.setItem(ACCOUNTS_KEY, JSON.stringify(accounts)); } catch {}
+  try { await setItem(ACCOUNTS_KEY, JSON.stringify(accounts)); } catch {}
 }
 
 async function getSession() {
   try {
-    const raw = await s()?.getItem(SESSION_KEY, { area: 'session' });
+    const raw = await getItem(SESSION_KEY, { area: 'session' });
     if (!raw) return null;
     const session = JSON.parse(raw);
     if (Date.now() >= session.expiry) return null;
@@ -44,7 +45,7 @@ async function getSession() {
 
 async function setSession(data) {
   try {
-    await s()?.setItem(SESSION_KEY, JSON.stringify({
+    await setItem(SESSION_KEY, JSON.stringify({
       ...data,
       expiry: Date.now() + SESSION_DURATION,
     }), { area: 'session' });
@@ -53,7 +54,7 @@ async function setSession(data) {
 
 async function clearSession() {
   _user = null;
-  try { await s()?.removeItem(SESSION_KEY, { area: 'session' }); } catch {}
+  try { await removeItem(SESSION_KEY, { area: 'session' }); } catch {}
 }
 
 // --- public API ---
@@ -150,7 +151,6 @@ export async function changePassword(oldPass, newPass) {
   // Admin shortcut
   if (_user.role === 'admin' && decodeAdminEmails().includes(_user.email)) {
     if (oldPass !== ADMIN_PASSWORD) return { ok: false, error: 'wrong_old_password' };
-    // Admin uses fixed password, but we can still update in accounts
   }
 
   const accounts = await getAccounts();
